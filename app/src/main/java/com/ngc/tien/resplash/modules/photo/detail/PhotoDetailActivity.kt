@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionListenerAdapter
-import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
@@ -26,7 +25,6 @@ import com.ngc.tien.resplash.data.remote.ResplashServiceLocator
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
 import com.ngc.tien.resplash.util.Constants
-import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_COLOR
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_HEIGHT
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_ID
@@ -42,7 +40,6 @@ import com.ngc.tien.resplash.util.extentions.visible
 
 class PhotoDetailActivity : AppCompatActivity() {
     private lateinit var sharedEnterTransitionListener: Transition.TransitionListener
-    private lateinit var sharedReturnTransitionListener: Transition.TransitionListener
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
     private var photoUrl = ""
     private var photoWidth = 0
@@ -159,20 +156,9 @@ class PhotoDetailActivity : AppCompatActivity() {
         // shared enter/return is used to handle transition between PhotoDetail and HomeFragment
         // shared exit transition is used to handle transition between PhotoDetail and PhotoZoom
         sharedEnterTransitionListener = object : TransitionListenerAdapter() {
-            override fun onTransitionStart(transition: Transition?) {
-                showBottomBar(false)
-            }
-
             override fun onTransitionEnd(transition: Transition?) {
                 viewModel.isTransitionFinished = true
                 renderUiState(viewModel.uiState.value)
-            }
-        }
-        sharedReturnTransitionListener = object : TransitionListenerAdapter() {
-            override fun onTransitionEnd(transition: Transition?) {
-                if (onBackPressed) {
-                    showBottomBar(true)
-                }
             }
         }
         sharedExitTransitionListener = object : TransitionListenerAdapter() {
@@ -184,7 +170,6 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
         window.sharedElementEnterTransition.addListener(sharedEnterTransitionListener)
         window.sharedElementExitTransition.addListener(sharedExitTransitionListener)
-        window.sharedElementReturnTransition.addListener(sharedReturnTransitionListener)
     }
 
     private fun initViews() {
@@ -255,13 +240,6 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBottomBar(visible: Boolean) {
-        Intent(IntentConstants.ACTION_SET_BOTTOM_BAR_VISIBILITY).run {
-            putExtra(IntentConstants.KEY_VISIBLE, visible)
-            sendBroadcast(this)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         resetPhotoImageState()
@@ -278,6 +256,5 @@ class PhotoDetailActivity : AppCompatActivity() {
         super.onDestroy()
         window.sharedElementEnterTransition.removeListener(sharedEnterTransitionListener)
         window.sharedElementExitTransition.removeListener(sharedExitTransitionListener)
-        window.sharedElementReturnTransition.removeListener(sharedReturnTransitionListener)
     }
 }
