@@ -12,7 +12,9 @@ import com.ngc.tien.resplash.modules.home.HomeFragment
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
 

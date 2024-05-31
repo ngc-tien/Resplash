@@ -8,10 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.model.PhotoResponseItem
 import com.ngc.tien.resplash.modules.home.HomeUiState.NextPageState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class HomeViewModel(private val resplashApiService: ResplashApiService) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val resplashApiService: ResplashApiService
+) : ViewModel() {
     private val _uiState = MutableLiveData<HomeUiState>(HomeUiState.FirstPageLoading)
 
     internal val uiStateLiveData: LiveData<HomeUiState> get() = _uiState

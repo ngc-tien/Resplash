@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.google.android.material.chip.Chip
 import com.ngc.tien.resplash.R
-import com.ngc.tien.resplash.data.remote.ResplashServiceLocator
+import com.ngc.tien.resplash.di.NetworkModule
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
 import com.ngc.tien.resplash.util.Constants
@@ -37,7 +37,9 @@ import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PhotoDetailActivity : AppCompatActivity() {
     private lateinit var sharedEnterTransitionListener: Transition.TransitionListener
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
@@ -51,17 +53,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         ActivityPhotoDetailBinding.inflate(layoutInflater)
     }
 
-    private val viewModel by viewModels<PhotoDetailViewModel>(
-        factoryProducer = {
-            viewModelFactory {
-                addInitializer(PhotoDetailViewModel::class) {
-                    PhotoDetailViewModel(
-                        resplashApiService = ResplashServiceLocator.resplashApiService
-                    )
-                }
-            }
-        }
-    )
+    private val viewModel by viewModels<PhotoDetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

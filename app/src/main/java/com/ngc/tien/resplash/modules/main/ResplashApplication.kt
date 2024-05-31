@@ -1,9 +1,7 @@
 package com.ngc.tien.resplash.modules.main
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class ResplashApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+@HiltAndroidApp
+class ResplashApplication : Application()

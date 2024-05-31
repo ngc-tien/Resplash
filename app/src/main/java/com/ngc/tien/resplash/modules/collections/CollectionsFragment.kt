@@ -9,13 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.R
-import com.ngc.tien.resplash.data.remote.ResplashServiceLocator
+import com.ngc.tien.resplash.di.NetworkModule
 import com.ngc.tien.resplash.databinding.CollectionsFragmentLayoutBinding
 import com.ngc.tien.resplash.modules.core.BaseFragment
 import com.ngc.tien.resplash.util.Constants.VISIBLE_ITEM_THRESHOLD
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.visible
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CollectionsFragment :
     BaseFragment<CollectionsFragmentLayoutBinding>(inflate = CollectionsFragmentLayoutBinding::inflate) {
 
@@ -23,17 +25,7 @@ class CollectionsFragment :
         RecyclerViewAdapter(Glide.with(this@CollectionsFragment))
     }
 
-    private val viewModel by viewModels<CollectionsViewModel>(
-        factoryProducer = {
-            viewModelFactory {
-                addInitializer(CollectionsViewModel::class) {
-                    CollectionsViewModel(
-                        resplashApiService = ResplashServiceLocator.resplashApiService
-                    )
-                }
-            }
-        }
-    )
+    private val viewModel by viewModels<CollectionsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

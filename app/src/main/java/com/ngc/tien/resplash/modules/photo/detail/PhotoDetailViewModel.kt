@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.model.PhotoDetailResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PhotoDetailViewModel(private val resplashApiService: ResplashApiService) : ViewModel() {
+@HiltViewModel
+class PhotoDetailViewModel @Inject constructor(
+    private val resplashApiService: ResplashApiService
+) : ViewModel() {
     private val _uiState = MutableLiveData<PhotoDetailUIState>()
 
     val uiState: LiveData<PhotoDetailUIState> get() = _uiState
@@ -44,7 +49,8 @@ fun PhotoDetailResponse.toItem(): PhotoDetailItem {
         totalViews = views,
         totalDownloads = downloads,
         totalLikes = likes,
-        tags = tags.map { it.title
+        tags = tags.map {
+            it.title
         }
     )
 }
