@@ -1,0 +1,60 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorAccent">?colorAccent</item>
+    </style>
+
+    <style name="Base.Theme.ResplashClone" parent="Base.MaterialThemeBuilder">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorPrimaryDark">@color/color_primary_variant</item>
+        <item name="colorAccent">@color/color_secondary</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorError">@color/color_error</item>
+
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorOnBackground">@color/color_on_background</item>
+        <item name="colorOnSurface">@color/color_on_surface</item>
+        <item name="colorControlNormal">@color/color_on_surface</item>
+
+        <item name="android:textColor">@color/color_on_surface</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Theme.ResplashClone" parent="Base.Theme.ResplashClone" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/color_surface</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="postSplashScreenTheme">@style/Theme.ResplashClone</item>
+    </style>
+
+    <style name="Theme.ResplashClone.PhotoDetail">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@color/immersive_sys_ui</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <style name="Theme.ResplashClone.PhotoZoom">
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:statusBarColor">@color/immersive_sys_ui</item>
+        <item name="android:navigationBarColor">@color/immersive_sys_ui</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="Theme.ResplashClone.PhotoDetail.AppBarLayout.ActionButton" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:tint">@color/white</item>
+    </style>
+</resources>
