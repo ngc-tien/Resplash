@@ -17,6 +17,7 @@ import com.ngc.tien.resplash.util.extentions.visible
 abstract class BaseRefreshListFragment : BaseFragment<RefreshRecyclerViewFragmentLayoutBinding>(
     RefreshRecyclerViewFragmentLayoutBinding::inflate
 ) {
+    private var isRefreshing = false
     abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
 
     abstract val viewModel: IBaseRefreshListViewModel
@@ -44,8 +45,16 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshRecyclerViewFragmen
 
     private fun addObserves() {
         handleLoadMore()
-        viewModel.uiStateLiveData.observe(viewLifecycleOwner,
-            ::renderUiState)
+        viewModel.uiStateLiveData.observe(
+            viewLifecycleOwner,
+            ::renderUiState
+        )
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            if (viewModel.uiStateLiveData.value !is BaseRefreshListUiState.FirstPageLoading && !isRefreshing) {
+                isRefreshing = true
+                viewModel.loadFirstPage()
+            }
+        }
     }
 
     private fun handleLoadMore() {
@@ -75,12 +84,16 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshRecyclerViewFragmen
     }
 
     open fun loadContentSuccess(uiState: BaseRefreshListUiState.Content) {
+        isRefreshing = false
+        binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.pauseAndGone()
         binding.errorState.gone()
         recyclerViewAdapter.submitList(uiState.items)
     }
 
     open fun showFirstPageErrorState(uiState: BaseRefreshListUiState.FirstPageError) {
+        isRefreshing = false
+        binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.pauseAndGone()
         binding.errorState.visible()
         binding.errorStateMessage.text = uiState.message
@@ -88,6 +101,8 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshRecyclerViewFragmen
     }
 
     open fun showFirstPageLoadingState() {
+        isRefreshing = false
+        binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.playAndShow()
         binding.errorState.gone()
         recyclerViewAdapter.submitList(emptyList())
