@@ -4,7 +4,6 @@ import com.ngc.tien.resplash.data.remote.model.CollectionsResponseItem
 import com.ngc.tien.resplash.data.remote.model.PhotoDetailResponse
 import com.ngc.tien.resplash.data.remote.model.PhotoResponseItem
 import com.ngc.tien.resplash.util.Constants.PAGE_PER_REQUEST
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET

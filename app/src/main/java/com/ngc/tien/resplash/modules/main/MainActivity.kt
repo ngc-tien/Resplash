@@ -1,17 +1,15 @@
 package com.ngc.tien.resplash.modules.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionListenerAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.databinding.ActivityMainBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.home.HomeFragment
-import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.transparent
-import com.ngc.tien.resplash.util.extentions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

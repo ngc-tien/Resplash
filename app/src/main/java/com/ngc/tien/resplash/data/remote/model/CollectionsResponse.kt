@@ -1,8 +1,8 @@
 package com.ngc.tien.resplash.data.remote.model
 
 
-import com.squareup.moshi.Json
 import androidx.annotation.Keep
+import com.squareup.moshi.Json
 
 @Keep
 data class CollectionsResponseItem(

@@ -13,15 +13,13 @@ import android.widget.LinearLayout
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
 import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.core.view.forEach
 import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.google.android.material.chip.Chip
 import com.ngc.tien.resplash.R
-import com.ngc.tien.resplash.di.NetworkModule
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
 import com.ngc.tien.resplash.util.Constants
