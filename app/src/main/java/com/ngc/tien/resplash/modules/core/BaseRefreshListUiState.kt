@@ -1,13 +1,13 @@
-package com.ngc.tien.resplash.modules.collections
+package com.ngc.tien.resplash.modules.core
 
-sealed interface CollectionsUiState {
-    data object FirstPageLoading : CollectionsUiState
-    data object FirstPageError : CollectionsUiState
+sealed interface BaseRefreshListUiState {
+    data object FirstPageLoading : BaseRefreshListUiState
+    data class FirstPageError(val message: String) : BaseRefreshListUiState
     data class Content(
-        val items: List<CollectionItem>,
+        val items: List<BaseRefreshListItem>,
         val currentPage: Int,
         val nextPageState: NextPageState
-    ) : CollectionsUiState
+    ) : BaseRefreshListUiState
 
     sealed interface NextPageState {
         data object Loading : NextPageState

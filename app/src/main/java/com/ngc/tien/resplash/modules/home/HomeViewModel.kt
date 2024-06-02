@@ -1,56 +1,49 @@
 package com.ngc.tien.resplash.modules.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.model.PhotoResponseItem
-import com.ngc.tien.resplash.modules.home.HomeUiState.NextPageState
+import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
+import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
+import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
-@HiltViewModel
+@HiltViewModel()
 class HomeViewModel @Inject constructor(
     private val resplashApiService: ResplashApiService
-) : ViewModel() {
-    private val _uiState = MutableLiveData<HomeUiState>(HomeUiState.FirstPageLoading)
+) : ViewModel(), IBaseRefreshListViewModel {
+    private val uiState =
+        MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
+    override val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
 
-    internal val uiStateLiveData: LiveData<HomeUiState> get() = _uiState
-
-    init {
-        loadFirstPage()
-    }
-
-    private fun loadFirstPage() {
+    override fun loadFirstPage() {
         viewModelScope.launch {
-            _uiState.value = HomeUiState.FirstPageLoading
+            uiState.value = BaseRefreshListUiState.FirstPageLoading
 
             try {
                 val items = resplashApiService
                     .getPhotos(page = 1)
                     .map { it.toItem() }
 
-                _uiState.value = HomeUiState.Content(
+                uiState.value = BaseRefreshListUiState.Content(
                     items = items,
                     currentPage = 1,
                     nextPageState = NextPageState.Idle,
                 )
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Throwable) {
-                Log.e("ngc.tien", e.message.toString())
-                _uiState.value = HomeUiState.FirstPageError
+            } catch (e: Exception) {
+                uiState.value = BaseRefreshListUiState.FirstPageError(e.message.toString())
             }
         }
     }
 
-    fun loadNextPage() {
-        val state = _uiState.value!!
-        if (state !is HomeUiState.Content) {
+    override fun loadNextPage() {
+        val state = uiState.value!!
+        if (state !is BaseRefreshListUiState.Content) {
             return
         }
 
@@ -59,7 +52,7 @@ class HomeViewModel @Inject constructor(
             NextPageState.Error -> return
             NextPageState.Loading -> return
             NextPageState.Idle -> {
-                _uiState.value = state.copy(nextPageState = NextPageState.Loading)
+                uiState.value = state.copy(nextPageState = NextPageState.Loading)
 
                 viewModelScope.launch {
                     val nextPage = state.currentPage + 1
@@ -69,7 +62,7 @@ class HomeViewModel @Inject constructor(
                             .getPhotos(page = nextPage)
                             .map { it.toItem() }
 
-                        _uiState.value = state.copy(
+                        uiState.value = state.copy(
                             items = (state.items + newItems).distinctBy { it.id },
                             currentPage = nextPage,
                             nextPageState = if (newItems.size < 10) {
@@ -78,11 +71,8 @@ class HomeViewModel @Inject constructor(
                                 NextPageState.Idle
                             }
                         )
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Throwable) {
-                        Log.e("ngc.tien", e.message.toString())
-                        _uiState.value = state.copy(nextPageState = NextPageState.Error)
+                    } catch (e: Exception) {
+                        uiState.value = state.copy(nextPageState = NextPageState.Error)
                     }
                 }
             }

@@ -1,7 +1,9 @@
 package com.ngc.tien.resplash.modules.collections
 
+import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
+
 data class CollectionItem(
-    val id: String,
+    override val id: String,
     val title: String,
     val userName: String,
     val userImage: String,
@@ -10,4 +12,4 @@ data class CollectionItem(
     val coverHeight: Int,
     val coverUrl: String,
     val coverColor: String,
-)
+) : BaseRefreshListItem()
