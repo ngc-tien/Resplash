@@ -1,14 +1,14 @@
-package com.ngc.tien.resplash.data.remote.model.collections
+package com.ngc.tien.resplash.data.remote.model.collection
 
 
 import androidx.annotation.Keep
-import com.ngc.tien.resplash.data.remote.model.photo.Photo
+import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.data.remote.model.photo.Tag
 import com.ngc.tien.resplash.data.remote.model.user.User
 import com.squareup.moshi.Json
 
 @Keep
-data class CollectionsResponseItem(
+data class CollectionsResponse(
     @Json(name = "id")
     val id: String, // tLDcyvOC_ks
     @Json(name = "title")
@@ -36,9 +36,9 @@ data class CollectionsResponseItem(
     @Json(name = "user")
     val user: User,
     @Json(name = "cover_photo")
-    val coverPhoto: Photo,
+    val coverPhoto: PhotoResponse,
     @Json(name = "preview_photos")
-    val previewPhotos: List<Photo>
+    val previewPhotos: List<PhotoResponse>
 ) {
     @Keep
     data class Links(

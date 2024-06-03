@@ -6,7 +6,7 @@ import com.ngc.tien.resplash.data.remote.model.user.User
 import com.squareup.moshi.Json
 
 @Keep
-data class Photo(
+data class PhotoResponse(
     @Json(name = "id")
     val id: String, // Ga7aBzN7qDw
     @Json(name = "created_at")

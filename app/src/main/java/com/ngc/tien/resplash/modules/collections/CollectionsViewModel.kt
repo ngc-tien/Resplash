@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
-import com.ngc.tien.resplash.data.remote.model.collections.CollectionsResponseItem
+import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -83,7 +83,7 @@ class CollectionsViewModel @Inject constructor(
     }
 }
 
-private fun CollectionsResponseItem.toItem(): CollectionItem {
+private fun CollectionsResponse.toItem(): CollectionItem {
     return CollectionItem(
         id = id,
         title = title,

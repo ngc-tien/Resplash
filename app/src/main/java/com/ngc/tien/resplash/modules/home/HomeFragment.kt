@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity
 import com.ngc.tien.resplash.util.Constants.SHARED_PHOTO_TRANSITION_NAME
@@ -26,17 +27,17 @@ class HomeFragment : BaseRefreshListFragment() {
     override val viewModel by viewModels<HomeViewModel>()
 
 
-    private fun handleItemClick(photoItem: PhotoItem, transitionImage: AppCompatImageView) {
+    private fun handleItemClick(photo: Photo, transitionImage: AppCompatImageView) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
             requireActivity(),
             transitionImage, SHARED_PHOTO_TRANSITION_NAME
         )
         Intent(requireActivity(), PhotoDetailActivity::class.java).apply {
-            putExtra(KEY_PHOTO_ID, photoItem.id)
-            putExtra(KEY_PHOTO_URL, photoItem.photoUrl)
-            putExtra(KEY_PHOTO_COLOR, photoItem.photoColor)
-            putExtra(KEY_PHOTO_WIDTH, photoItem.photoWidth)
-            putExtra(KEY_PHOTO_HEIGHT, photoItem.photoHeight)
+            putExtra(KEY_PHOTO_ID, photo.id)
+            putExtra(KEY_PHOTO_URL, photo.thumbnailUrl)
+            putExtra(KEY_PHOTO_COLOR, photo.color)
+            putExtra(KEY_PHOTO_WIDTH, photo.width)
+            putExtra(KEY_PHOTO_HEIGHT, photo.height)
             startActivity(this, options.toBundle())
         }
     }
