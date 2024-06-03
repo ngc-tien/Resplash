@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
-import com.ngc.tien.resplash.data.remote.model.CollectionsResponseItem
+import com.ngc.tien.resplash.data.remote.model.collections.CollectionsResponseItem
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -90,9 +90,9 @@ private fun CollectionsResponseItem.toItem(): CollectionItem {
         totalPhotos = totalPhotos,
         userName = user.name,
         userImage = user.profileImage.medium,
-        coverWidth = coverPhoto.width,
-        coverHeight = coverPhoto.height,
+        coverWidth = coverPhoto?.width ?: 0,
+        coverHeight = coverPhoto?.height ?: 0,
         coverUrl = coverPhoto.urls.regular,
-        coverColor = coverPhoto.color
+        coverColor = coverPhoto.color ?: "#E0E0E0"
     )
 }

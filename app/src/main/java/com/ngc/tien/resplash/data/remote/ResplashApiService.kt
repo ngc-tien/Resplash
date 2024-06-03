@@ -1,8 +1,7 @@
 package com.ngc.tien.resplash.data.remote
 
-import com.ngc.tien.resplash.data.remote.model.CollectionsResponseItem
-import com.ngc.tien.resplash.data.remote.model.PhotoDetailResponse
-import com.ngc.tien.resplash.data.remote.model.PhotoResponseItem
+import com.ngc.tien.resplash.data.remote.model.collections.CollectionsResponseItem
+import com.ngc.tien.resplash.data.remote.model.photo.Photo
 import com.ngc.tien.resplash.util.Constants.PAGE_PER_REQUEST
 import retrofit2.Retrofit
 import retrofit2.create
@@ -19,12 +18,12 @@ interface ResplashApiService {
     suspend fun getPhotos(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int = PAGE_PER_REQUEST,
-    ): List<PhotoResponseItem>
+    ): List<Photo>
 
     @GET("photos/{id}")
     suspend fun getPhotosById(
         @Path("id") id: String,
-    ): PhotoDetailResponse
+    ): Photo
 
     @GET("collections")
     suspend fun getCollections(

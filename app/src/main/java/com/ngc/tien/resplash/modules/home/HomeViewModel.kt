@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
-import com.ngc.tien.resplash.data.remote.model.PhotoResponseItem
+import com.ngc.tien.resplash.data.remote.model.photo.Photo
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -80,14 +80,14 @@ class HomeViewModel @Inject constructor(
     }
 }
 
-private fun PhotoResponseItem.toItem(): PhotoItem {
+private fun Photo.toItem(): PhotoItem {
     return PhotoItem(
         id = this.id,
-        userName = user.name,
-        userImage = user.profileImage.medium,
-        photoWidth = width,
-        photoHeight = height,
+        userName = user?.name ?: "",
+        userImage = user?.profileImage?.medium ?: "",
+        photoWidth = width ?: 0,
+        photoHeight = height ?: 0,
         photoUrl = urls.regular,
-        photoColor = color
+        photoColor = color ?: "#E0E0E0"
     )
 }
