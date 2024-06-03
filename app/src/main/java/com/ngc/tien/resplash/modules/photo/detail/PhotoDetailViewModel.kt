@@ -46,6 +46,7 @@ fun PhotoDetailResponse.toItem(): PhotoDetailItem {
         iso = exif?.iso?.toString() ?: "Unknown",
         width = width,
         height = height,
+        downloadPhotoUrl = urls.full,
         totalViews = views,
         totalDownloads = downloads,
         totalLikes = likes,

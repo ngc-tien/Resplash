@@ -12,6 +12,7 @@ data class PhotoDetailItem(
     val iso: String,
     val width: Int,
     val height: Int,
+    val downloadPhotoUrl: String,
     val totalViews: Int,
     val totalDownloads: Int,
     val totalLikes: Int,

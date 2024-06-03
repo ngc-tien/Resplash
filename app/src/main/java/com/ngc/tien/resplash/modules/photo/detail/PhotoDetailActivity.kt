@@ -1,15 +1,22 @@
 package com.ngc.tien.resplash.modules.photo.detail
 
+import android.annotation.SuppressLint
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionListenerAdapter
+import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -37,10 +44,13 @@ import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class PhotoDetailActivity : AppCompatActivity() {
     private lateinit var sharedEnterTransitionListener: Transition.TransitionListener
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
+    private lateinit var wallpaperDownloadManager: WallpaperDownloadManager
+    private lateinit var downloadReceiver: BroadcastReceiver
     private var photoUrl = ""
     private var photoWidth = 0
     private var photoHeight = 0
@@ -56,13 +66,13 @@ class PhotoDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        loadIntentData()
+        loadData()
         initViews()
-        addListener()
-        bindingData()
+        addListeners()
+        addObserves()
     }
 
-    private fun loadIntentData() {
+    private fun loadData() {
         intent?.let {
             binding.photoImage.setBackgroundColor(Color.parseColor(it.getStringExtra(KEY_PHOTO_COLOR)))
             binding.userImage.setBackgroundColor(Color.parseColor(it.getStringExtra(KEY_PHOTO_COLOR)))
@@ -82,9 +92,10 @@ class PhotoDetailActivity : AppCompatActivity() {
                 viewModel.getPhoto(it.getStringExtra(KEY_PHOTO_ID) ?: "")
             }
         }
+        wallpaperDownloadManager = WallpaperDownloadManager()
     }
 
-    private fun addListener() {
+    private fun addListeners() {
         binding.toolBar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -111,6 +122,20 @@ class PhotoDetailActivity : AppCompatActivity() {
                     startActivity(this, options.toBundle())
                 }
             }
+        }
+        binding.downloadPhoto.setOnClickListener {
+            val uiState = viewModel.uiState.value as PhotoDetailUIState.Content
+            val fileName = uiState.item.run {
+                userName.lowercase().replace(" ", "-") + "-" + id + ".png"
+            }
+            val downloadId = wallpaperDownloadManager.downloadFile(
+                this@PhotoDetailActivity,
+                fileName,
+                "Downloading $fileName",
+                uiState.item.downloadPhotoUrl
+            )
+            Log.e("tien.ngc", downloadId.toString())
+            Toast.makeText(this@PhotoDetailActivity, "Download started", Toast.LENGTH_SHORT).show()
         }
         addSharedWindowTransitionAnimation()
     }
@@ -172,10 +197,40 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun bindingData() {
+    private fun addObserves() {
         viewModel.uiState.observe(
             this,
             ::renderUiState
+        )
+        downloadReceiver = object : BroadcastReceiver() {
+            @SuppressLint("Range")
+            override fun onReceive(context: Context, intent: Intent) {
+                val downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                var message = ""
+                if (downloadId == -1L) {
+                    message = "Download failed"
+                } else {
+                    val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                    downloadManager.query(DownloadManager.Query().setFilterById(downloadId))?.use {
+                        it.moveToNext()
+                        val status: Int =
+                            it.getInt(it.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                            message = "Download completed"
+                        } else if (status == DownloadManager.STATUS_FAILED) {
+                            message = "Download failed"
+                        }
+                    }
+                }
+                if (message.isNotEmpty()) {
+                    Toast.makeText(this@PhotoDetailActivity, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        registerReceiver(
+            downloadReceiver,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            RECEIVER_EXPORTED
         )
     }
 
@@ -244,6 +299,7 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        unregisterReceiver(downloadReceiver)
         window.sharedElementEnterTransition.removeListener(sharedEnterTransitionListener)
         window.sharedElementExitTransition.removeListener(sharedExitTransitionListener)
     }
