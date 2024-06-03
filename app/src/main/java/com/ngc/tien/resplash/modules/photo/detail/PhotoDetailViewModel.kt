@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
+import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotoDetailViewModel @Inject constructor(
-    private val resplashApiService: ResplashApiService
+    private val photoRepository: PhotoRepository
 ) : ViewModel() {
     private val _uiState = MutableLiveData<PhotoDetailUIState>()
 
@@ -24,8 +25,8 @@ class PhotoDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = PhotoDetailUIState.Loading
             try {
-                val response = resplashApiService.getPhotosById(id)
-                _uiState.value = PhotoDetailUIState.Content(response.toItem())
+                val response = photoRepository.getPhotosById(id)
+                _uiState.value = PhotoDetailUIState.Content(response)
             } catch (ex: Exception) {
                 _uiState.value = PhotoDetailUIState.Error(ex.message.toString())
             }

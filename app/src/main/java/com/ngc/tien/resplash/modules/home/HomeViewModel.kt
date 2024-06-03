@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
+import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel()
 class HomeViewModel @Inject constructor(
-    private val resplashApiService: ResplashApiService
+    private val photoRepository: PhotoRepository
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
@@ -26,10 +27,7 @@ class HomeViewModel @Inject constructor(
             uiState.value = BaseRefreshListUiState.FirstPageLoading
 
             try {
-                val items = resplashApiService
-                    .getPhotos(page = 1)
-                    .map { it.toItem() }
-
+                val items = photoRepository.getPhotos(page = 1)
                 uiState.value = BaseRefreshListUiState.Content(
                     items = items,
                     currentPage = 1,
@@ -58,10 +56,7 @@ class HomeViewModel @Inject constructor(
                     val nextPage = state.currentPage + 1
 
                     try {
-                        val newItems = resplashApiService
-                            .getPhotos(page = nextPage)
-                            .map { it.toItem() }
-
+                        val newItems = photoRepository.getPhotos(page = nextPage)
                         uiState.value = state.copy(
                             items = (state.items + newItems).distinctBy { it.id },
                             currentPage = nextPage,

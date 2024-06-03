@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.ResplashApiService
-import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
+import com.ngc.tien.resplash.data.remote.mapper.collection.toItem
+import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CollectionsViewModel @Inject constructor(
-    private val resplashApiService: ResplashApiService
+    private val collectionRepository: CollectionRepository
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
@@ -27,16 +28,14 @@ class CollectionsViewModel @Inject constructor(
             uiState.value = BaseRefreshListUiState.FirstPageLoading
 
             try {
-                val items = resplashApiService
+                val items = collectionRepository
                     .getCollections(page = 1)
-                    .map { it.toItem() }
-
                 uiState.value = BaseRefreshListUiState.Content(
                     items = items,
                     currentPage = 1,
                     nextPageState = NextPageState.Idle,
                 )
-            }  catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("ngc.tien", e.message.toString())
                 uiState.value = BaseRefreshListUiState.FirstPageError(e.message.toString())
             }
@@ -60,10 +59,7 @@ class CollectionsViewModel @Inject constructor(
                     val nextPage = state.currentPage + 1
 
                     try {
-                        val newItems = resplashApiService
-                            .getCollections(page = nextPage)
-                            .map { it.toItem() }
-
+                        val newItems = collectionRepository.getCollections(page = nextPage)
                         uiState.value = state.copy(
                             items = (state.items + newItems).distinctBy { it.id },
                             currentPage = nextPage,
@@ -81,18 +77,4 @@ class CollectionsViewModel @Inject constructor(
             }
         }
     }
-}
-
-private fun CollectionsResponse.toItem(): CollectionItem {
-    return CollectionItem(
-        id = id,
-        title = title,
-        totalPhotos = totalPhotos,
-        userName = user.name,
-        userImage = user.profileImage.medium,
-        coverWidth = coverPhoto?.width ?: 0,
-        coverHeight = coverPhoto?.height ?: 0,
-        coverUrl = coverPhoto.urls.regular,
-        coverColor = coverPhoto.color ?: "#E0E0E0"
-    )
 }

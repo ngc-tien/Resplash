@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.RequestManager
+import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.databinding.CollectionItemViewLayoutBinding
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
 import com.ngc.tien.resplash.modules.core.BaseRefreshListViewAdapter
@@ -12,7 +13,7 @@ import com.ngc.tien.resplash.modules.core.BaseViewHolder
 
 class RecyclerViewAdapter(
     private val requestManager: RequestManager,
-    private val onItemClick: (collectionItem: CollectionItem, transitionImage: AppCompatImageView) -> Unit
+    private val onItemClick: (collection: Collection, transitionImage: AppCompatImageView) -> Unit
 ) : BaseRefreshListViewAdapter() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -29,11 +30,11 @@ class RecyclerViewAdapter(
     class ViewHolder(
         private val requestManager: RequestManager,
         private val binding: CollectionItemViewLayoutBinding,
-        private val onItemClick: (collectionItem: CollectionItem, transitionImage: AppCompatImageView) -> Unit
+        private val onItemClick: (collection: Collection, transitionImage: AppCompatImageView) -> Unit
     ) :
         BaseViewHolder(binding) {
         override fun bind(item: BaseRefreshListItem) {
-            (item as CollectionItem).run {
+            (item as Collection).run {
                 binding.photoNumber.text = "$totalPhotos photos"
                 binding.collectionName.text = title
                 binding.userName.text = userName

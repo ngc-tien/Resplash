@@ -17,7 +17,7 @@ interface ResplashApiService {
     @GET("photos")
     suspend fun getPhotos(
         @Query("page") page: Int,
-        @Query("per_page") perPage: Int = PAGE_PER_REQUEST,
+        @Query("per_page") perPage: Int,
     ): List<PhotoResponse>
 
     @GET("photos/{id}")
@@ -28,6 +28,6 @@ interface ResplashApiService {
     @GET("collections")
     suspend fun getCollections(
         @Query("page") page: Int,
-        @Query("per_page") perPage: Int = PAGE_PER_REQUEST,
+        @Query("per_page") perPage: Int,
     ): List<CollectionsResponse>
 }
