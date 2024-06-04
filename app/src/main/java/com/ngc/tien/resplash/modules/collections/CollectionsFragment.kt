@@ -1,5 +1,6 @@
 package com.ngc.tien.resplash.modules.collections
 
+import android.util.Log
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -22,6 +23,5 @@ class CollectionsFragment : BaseRefreshListFragment() {
         collection: Collection,
         transitionImage: AppCompatImageView
     ) {
-
     }
 }
