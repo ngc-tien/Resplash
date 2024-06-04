@@ -54,6 +54,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     private var photoUrl = ""
     private var photoWidth = 0
     private var photoHeight = 0
+    private var photoId = ""
     private var onBackPressed: Boolean = false
     private var photoBitmap: Bitmap? = null
 
@@ -88,7 +89,8 @@ class PhotoDetailActivity : AppCompatActivity() {
             photoWidth = it.getIntExtra(KEY_PHOTO_WIDTH, 0)
             photoHeight = it.getIntExtra(KEY_PHOTO_HEIGHT, 0)
             if (viewModel.uiState.value !is PhotoDetailUIState.Content) {
-                viewModel.getPhoto(it.getStringExtra(KEY_PHOTO_ID) ?: "")
+                photoId = it.getStringExtra(KEY_PHOTO_ID) ?: ""
+                viewModel.getPhoto(photoId)
             }
         }
         wallpaperDownloadManager = WallpaperDownloadManager()
@@ -133,8 +135,12 @@ class PhotoDetailActivity : AppCompatActivity() {
                 "Downloading $fileName",
                 uiState.item.downloadPhotoUrl
             )
-            Log.e("tien.ngc", downloadId.toString())
             Toast.makeText(this@PhotoDetailActivity, "Download started", Toast.LENGTH_SHORT).show()
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.errorState.gone()
+            binding.photoDetail.gone()
+            viewModel.getPhoto(photoId)
         }
         addSharedWindowTransitionAnimation()
     }
@@ -238,6 +244,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         when (uiState) {
             is PhotoDetailUIState.Content -> renderPhotoDetail(uiState)
             is PhotoDetailUIState.Error -> {
+                binding.swipeRefreshLayout.isRefreshing = false
                 binding.lottieLoading.pauseAndGone()
                 binding.errorState.visible()
                 binding.appBarLayout.visible()
@@ -259,6 +266,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.appBarLayout.visible()
         binding.errorState.gone()
         binding.lottieLoading.pauseAndGone()
+        binding.swipeRefreshLayout.isRefreshing = false
         if (item.location.isNotEmpty()) {
             binding.locationWrapper.visible()
             binding.locationName.text = item.location
