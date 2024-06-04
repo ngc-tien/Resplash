@@ -65,9 +65,8 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        loadData()
         initViews()
+        loadData()
         addListeners()
         addObserves()
     }
@@ -188,6 +187,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        setContentView(binding.root)
         binding.lottieLoading.apply {
             setAnimation(R.raw.lottie_loading)
             repeatCount = LottieDrawable.INFINITE;
@@ -237,7 +237,12 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun renderUiState(uiState: PhotoDetailUIState?) {
         when (uiState) {
             is PhotoDetailUIState.Content -> renderPhotoDetail(uiState)
-            is PhotoDetailUIState.Error -> binding.lottieLoading.pauseAndGone()
+            is PhotoDetailUIState.Error -> {
+                binding.lottieLoading.pauseAndGone()
+                binding.errorState.visible()
+                binding.appBarLayout.visible()
+                binding.errorStateMessage.text = uiState.message
+            }
             is PhotoDetailUIState.Loading -> binding.lottieLoading.playAndShow()
             else -> {}
         }
@@ -250,9 +255,10 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
 
         val item = uiState.item
-        binding.lottieLoading.pauseAndGone()
         binding.photoDetail.visible()
         binding.appBarLayout.visible()
+        binding.errorState.gone()
+        binding.lottieLoading.pauseAndGone()
         if (item.location.isNotEmpty()) {
             binding.locationWrapper.visible()
             binding.locationName.text = item.location

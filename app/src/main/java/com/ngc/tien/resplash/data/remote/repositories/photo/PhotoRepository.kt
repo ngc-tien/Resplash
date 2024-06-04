@@ -3,12 +3,11 @@ package com.ngc.tien.resplash.data.remote.repositories.photo
 import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
-import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.util.Constants
-import dagger.Component
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@Component
+@Singleton
 class PhotoRepository @Inject constructor(
     private val resplashApiService: ResplashApiService
 ) {

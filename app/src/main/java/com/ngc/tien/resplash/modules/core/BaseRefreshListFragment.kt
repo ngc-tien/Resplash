@@ -7,19 +7,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
-import com.ngc.tien.resplash.databinding.RefreshRecyclerViewFragmentLayoutBinding
+import com.ngc.tien.resplash.databinding.RefreshListItemFragmentLayoutBinding
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.visible
 
-abstract class BaseRefreshListFragment : BaseFragment<RefreshRecyclerViewFragmentLayoutBinding>(
-    RefreshRecyclerViewFragmentLayoutBinding::inflate
+abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLayoutBinding>(
+    RefreshListItemFragmentLayoutBinding::inflate
 ) {
     private var isRefreshing = false
     abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
-
     abstract val viewModel: IBaseRefreshListViewModel
 
     @CallSuper

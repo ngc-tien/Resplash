@@ -12,13 +12,13 @@ fun View.gone() {
 }
 
 fun LottieAnimationView.pauseAndGone() {
-    pauseAnimation()
     gone()
+    pauseAnimation()
 }
 
 fun LottieAnimationView.playAndShow() {
-    playAnimation()
     visible()
+    playAnimation()
 }
 
 fun View.transparent(transparent: Boolean) {

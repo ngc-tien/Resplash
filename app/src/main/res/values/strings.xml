@@ -2,4 +2,6 @@
     <string name="app_name">ResplashClone</string>
     <string name="home">Home</string>
     <string name="collections">Collections</string>
+    <string name="unable_to_connect_to_the_server">Unable to connect to the server, please try again</string>
+    <string name="something_went_wrong">Something went wrong, please try again</string>
 </resources>
