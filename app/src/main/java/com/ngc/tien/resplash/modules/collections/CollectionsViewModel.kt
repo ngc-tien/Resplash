@@ -5,38 +5,40 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ngc.tien.resplash.data.remote.ResplashApiService
+import com.ngc.tien.resplash.data.remote.mapper.collection.toItem
 import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
+import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
+import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
-import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
-import com.ngc.tien.resplash.util.UiState
-import com.ngc.tien.resplash.util.UiState.NextPageState
-import com.ngc.tien.resplash.util.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CollectionsViewModel @Inject constructor(
-    private val collectionRepository: CollectionRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val collectionRepository: CollectionRepository
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
-        MutableLiveData<UiState<List<Collection>>>(UiState.FirstPageLoading)
-    override val uiStateLiveData: LiveData<UiState<List<Collection>>> get() = uiState
+        MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
+    override val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
 
     override fun loadFirstPage() {
         viewModelScope.launch {
-            uiState.value = UiState.FirstPageLoading
-            val items = safeApiCall(dispatcher) {
-                collectionRepository.getCollections(page = 1)
+            uiState.value = BaseRefreshListUiState.FirstPageLoading
+
+            try {
+                val items = collectionRepository
+                    .getCollections(page = 1)
+                uiState.value = BaseRefreshListUiState.Content(
+                    items = items,
+                    currentPage = 1,
+                    nextPageState = NextPageState.Idle,
+                )
+            } catch (e: Exception) {
+                Log.e("ngc.tien", e.message.toString())
+                uiState.value = BaseRefreshListUiState.FirstPageError(e.message.toString())
             }
-            uiState.value = UiState.Success(
-                data = items,
-                currentPage = 1,
-                nextPageState = NextPageState.Idle,
-            )
         }
     }
 
