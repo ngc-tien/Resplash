@@ -461,6 +461,7 @@
                 android:layout_width="@dimen/error_state_icon_size"
                 android:layout_height="@dimen/error_state_icon_size"
                 android:src="@drawable/oops_icon"
+                android:tint="@color/color_secondary"
                 app:layout_constraintBottom_toTopOf="@id/errorStateMessage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
