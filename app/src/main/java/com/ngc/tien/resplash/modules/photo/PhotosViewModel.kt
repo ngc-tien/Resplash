@@ -1,4 +1,4 @@
-package com.ngc.tien.resplash.modules.home
+package com.ngc.tien.resplash.modules.photo
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel()
-class HomeViewModel @Inject constructor(
+class PhotosViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val photoRepository: PhotoRepository
 ) : ViewModel(), IBaseRefreshListViewModel {

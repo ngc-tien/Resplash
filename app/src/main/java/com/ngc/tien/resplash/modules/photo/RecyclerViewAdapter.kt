@@ -1,4 +1,4 @@
-package com.ngc.tien.resplash.modules.home
+package com.ngc.tien.resplash.modules.photo
 
 import android.graphics.Color
 import android.view.LayoutInflater

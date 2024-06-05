@@ -1,4 +1,4 @@
-package com.ngc.tien.resplash.modules.home
+package com.ngc.tien.resplash.modules.photo
 
 import android.content.Intent
 import androidx.appcompat.widget.AppCompatImageView
@@ -18,13 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseRefreshListFragment() {
+class PhotosFragment : BaseRefreshListFragment() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        RecyclerViewAdapter(Glide.with(this@HomeFragment),
+        RecyclerViewAdapter(Glide.with(this@PhotosFragment),
             ::handleItemClick)
     }
 
-    override val viewModel by viewModels<HomeViewModel>()
+    override val viewModel by viewModels<PhotosViewModel>()
 
 
     private fun handleItemClick(photo: Photo, transitionImage: AppCompatImageView) {

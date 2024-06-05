@@ -8,7 +8,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.databinding.ActivityMainBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
-import com.ngc.tien.resplash.modules.home.HomeFragment
+import com.ngc.tien.resplash.modules.photo.PhotosFragment
 import com.ngc.tien.resplash.util.extentions.transparent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
         viewPagerAdapter = MainViewPagerAdapter(this)
-        viewPagerAdapter.addFragment(HomeFragment(), getString(R.string.home))
+        viewPagerAdapter.addFragment(PhotosFragment(), getString(R.string.home))
         viewPagerAdapter.addFragment(CollectionsFragment(), getString(R.string.collections))
         binding.viewPager.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
