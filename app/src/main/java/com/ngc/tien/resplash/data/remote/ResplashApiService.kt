@@ -36,8 +36,10 @@ interface ResplashApiService {
         @Path("id") id: String,
     ): CollectionsResponse
 
-    @GET("collections/{id}/photos}")
+    @GET("collections/{id}/photos")
     suspend fun getCollectionPhotos(
         @Path("id") id: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
     ): List<PhotoResponse>
 }

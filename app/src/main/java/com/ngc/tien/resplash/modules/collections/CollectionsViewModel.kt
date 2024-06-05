@@ -5,10 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
+import com.ngc.tien.resplash.modules.photo.RequestType
 import com.ngc.tien.resplash.util.getErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,7 +25,6 @@ class CollectionsViewModel @Inject constructor(
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
     override val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
-
     override fun loadFirstPage() {
         viewModelScope.launch {
             uiState.value = BaseRefreshListUiState.FirstPageLoading

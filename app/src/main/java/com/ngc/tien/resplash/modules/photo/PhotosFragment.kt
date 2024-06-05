@@ -9,6 +9,7 @@ import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity
 import com.ngc.tien.resplash.util.Constants.SHARED_PHOTO_TRANSITION_NAME
+import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_COLOR
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_HEIGHT
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_ID
@@ -26,6 +27,19 @@ class PhotosFragment : BaseRefreshListFragment() {
 
     override val viewModel by viewModels<PhotosViewModel>()
 
+    override fun initData() {
+        var requestType = RequestType.Home
+        arguments?.run {
+            requireArguments().run {
+                if (containsKey(IntentConstants.KEY_COLLECTION_ID)) {
+                    requestType = RequestType.Collection
+                    requestType.id = getString(IntentConstants.KEY_COLLECTION_ID)!!
+                }
+            }
+        }
+        viewModel.requestType = requestType
+        super.initData()
+    }
 
     private fun handleItemClick(photo: Photo, transitionImage: AppCompatImageView) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(

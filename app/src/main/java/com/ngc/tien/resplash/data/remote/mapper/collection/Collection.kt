@@ -2,6 +2,7 @@ package com.ngc.tien.resplash.data.remote.mapper.collection
 
 import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
+import java.io.Serializable
 
 data class Collection(
     override val id: String,
@@ -13,7 +14,7 @@ data class Collection(
     val coverHeight: Int,
     val coverUrl: String,
     val coverColor: String,
-) : BaseRefreshListItem()
+) : BaseRefreshListItem(), Serializable
 
 fun CollectionsResponse.toItem(): Collection {
     return Collection(

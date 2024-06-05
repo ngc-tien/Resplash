@@ -31,7 +31,8 @@ class CollectionRepository @Inject constructor(
 
     suspend fun getCollectionPhotos(
         id: String,
+        page: Int,
     ): List<Photo> {
-        return resplashApiService.getCollectionPhotos(id).map { it.toItem() }
+        return resplashApiService.getCollectionPhotos(id, page, Constants.PAGE_PER_REQUEST).map { it.toItem() }
     }
 }

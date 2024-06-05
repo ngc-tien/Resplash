@@ -38,7 +38,7 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         binding.lottieLoading.repeatCount = LottieDrawable.INFINITE
     }
 
-    private fun initData() {
+    open fun initData() {
         viewModel.loadFirstPage()
     }
 
@@ -86,8 +86,13 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         isRefreshing = false
         binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.pauseAndGone()
-        binding.errorState.gone()
-        recyclerViewAdapter.submitList(uiState.items)
+        if (uiState.items.isEmpty()) {
+            binding.errorState.visible()
+            binding.errorStateMessage.text = getString(R.string.nothing_to_see_here)
+        } else {
+            binding.errorState.gone()
+            recyclerViewAdapter.submitList(uiState.items)
+        }
     }
 
     open fun showFirstPageErrorState(uiState: BaseRefreshListUiState.FirstPageError) {
