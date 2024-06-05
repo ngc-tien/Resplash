@@ -1,11 +1,7 @@
 package com.ngc.tien.resplash.modules.collections.detail
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.databinding.ActivityCollectionDetailBinding
 import com.ngc.tien.resplash.modules.photo.PhotosFragment

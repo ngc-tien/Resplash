@@ -201,6 +201,9 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.toolBar.menu.forEach { menu ->
             menu.icon?.setTint(resources.getColor(R.color.white, null))
         }
+        binding.setWallpaperButton.setOnClickListener{
+            viewModel.setWallpaper()
+        }
     }
 
     private fun addObserves() {
@@ -208,6 +211,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             this,
             ::renderUiState
         )
+        viewModel.setWallpaperMessage.observe(this, ::renderSetWallpaperMessage)
         downloadReceiver = object : BroadcastReceiver() {
             @SuppressLint("Range")
             override fun onReceive(context: Context, intent: Intent) {
@@ -296,6 +300,12 @@ class PhotoDetailActivity : AppCompatActivity() {
                 }
                 binding.tags.addView(chip, layoutParams)
             }
+        }
+    }
+
+    private fun renderSetWallpaperMessage(message: String) {
+        if (message.isNotEmpty()) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 

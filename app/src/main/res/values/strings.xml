@@ -5,4 +5,5 @@
     <string name="unable_to_connect_to_the_server">Unable to connect to the server, please try again</string>
     <string name="something_went_wrong">Something went wrong, please try again</string>
     <string name="nothing_to_see_here">Nothing to see here....</string>
+    <string name="set_as_wallpaper">SET AS WALLPAPER</string>
 </resources>
