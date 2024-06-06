@@ -7,4 +7,5 @@
     <string name="something_went_wrong">Something went wrong, please try again</string>
     <string name="nothing_to_see_here">Nothing to see here....</string>
     <string name="set_as_wallpaper">SET AS WALLPAPER</string>
+    <string name="unsplash_unauthed_submit_url" translatable="false">https://unsplash.com/?modal=%5B%22Login%22%2C%5B%22SubmitAPhoto%22%2C%7B%22mode%22%3A%5B%22Publish%22%2Cnull%5D%7D%5D%5D</string>
 </resources>

@@ -12,6 +12,7 @@ import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.core.BaseViewPagerAdapter
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
 import com.ngc.tien.resplash.util.Constants
+import com.ngc.tien.resplash.util.extentions.launchUrl
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.helper.LauncherHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,6 +49,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_search -> LauncherHelper.launchSearchPage(this@MainActivity)
             }
             true
+        }
+        binding.fabAdd.setOnClickListener {
+            launchUrl(getString(R.string.unsplash_unauthed_submit_url))
         }
     }
 
