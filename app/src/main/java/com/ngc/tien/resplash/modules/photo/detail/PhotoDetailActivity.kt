@@ -43,6 +43,7 @@ import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.shareUrl
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
+import com.ngc.tien.resplash.util.helper.LauncherHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -307,7 +308,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 }
                 binding.tags.addView(chip, layoutParams)
                 chip.setOnClickListener {
-                    handleTagClicked(tag)
+                    LauncherHelper.launchSearchPage(this@PhotoDetailActivity, tag)
                 }
             }
         }
@@ -316,13 +317,6 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun renderSetWallpaperMessage(message: String) {
         if (message.isNotEmpty()) {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun handleTagClicked(tag: String) {
-        Intent(this@PhotoDetailActivity, SearchActivity::class.java).run {
-            putExtra(IntentConstants.KEY_SEARCH_QUERY, tag)
-            startActivity(this)
         }
     }
 

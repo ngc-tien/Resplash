@@ -13,6 +13,7 @@ import com.ngc.tien.resplash.modules.core.BaseViewPagerAdapter
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.extentions.transparent
+import com.ngc.tien.resplash.util.helper.LauncherHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = viewPagerAdapter.getPageTitle(position)
         }.attach()
+        binding.bottomAppBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.menu_search -> LauncherHelper.launchSearchPage(this@MainActivity)
+            }
+            true
+        }
     }
 
     private fun setupWindowTransitionAnimation() {

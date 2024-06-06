@@ -21,16 +21,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var viewPagerAdapter: BaseViewPagerAdapter
-    private var searchString: String? = null
+    private lateinit var searchString: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        searchString = intent.getStringExtra(IntentConstants.KEY_SEARCH_QUERY)
-        if (searchString == null) {
-            finish()
-        } else {
-            initViews()
-        }
+        searchString = intent.getStringExtra(IntentConstants.KEY_SEARCH_QUERY) ?: ""
+        initViews()
     }
 
     private fun initViews() {
