@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
+import com.ngc.tien.resplash.modules.core.RequestType
 import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity
 import com.ngc.tien.resplash.util.Constants.SHARED_PHOTO_TRANSITION_NAME
 import com.ngc.tien.resplash.util.IntentConstants
@@ -29,7 +30,11 @@ class PhotosFragment : BaseRefreshListFragment() {
             requireArguments().run {
                 if (containsKey(IntentConstants.KEY_COLLECTION_ID)) {
                     requestType = RequestType.Collection
-                    requestType.id = getString(IntentConstants.KEY_COLLECTION_ID)!!
+                    requestType.query = getString(IntentConstants.KEY_COLLECTION_ID)!!
+                } else if (containsKey(IntentConstants.KEY_SEARCH_QUERY)) {
+                    requestType = RequestType.Search
+                    requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
+                    binding.swipeRefreshLayout.isEnabled = false
                 }
             }
         }

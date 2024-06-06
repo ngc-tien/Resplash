@@ -6,4 +6,6 @@ object IntentConstants {
 
     const val KEY_COLLECTION = "COLLECTION"
     const val KEY_COLLECTION_ID = "COLLECTION_ID"
+
+    const val KEY_SEARCH_QUERY = "SEARCH_QUERY"
 }

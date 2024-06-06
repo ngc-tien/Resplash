@@ -2,7 +2,6 @@ package com.ngc.tien.resplash.modules.photo.detail
 
 import android.app.WallpaperManager
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

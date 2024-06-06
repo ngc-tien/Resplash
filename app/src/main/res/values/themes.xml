@@ -29,6 +29,7 @@
 
         <item name="android:textColor">@color/color_on_surface</item>
         <item name="fontFamily">sans-serif</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
     </style>
 
     <style name="Theme.ResplashClone" parent="Base.Theme.ResplashClone" />

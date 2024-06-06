@@ -5,11 +5,7 @@ import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.data.remote.mapper.collection.toItem
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
-import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
-import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.util.Constants
-import retrofit2.http.GET
-import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 

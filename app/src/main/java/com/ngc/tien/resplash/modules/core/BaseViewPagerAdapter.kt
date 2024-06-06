@@ -1,10 +1,10 @@
-package com.ngc.tien.resplash.modules.main
+package com.ngc.tien.resplash.modules.core
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class MainViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+class BaseViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
     private val fragmentList: MutableList<Fragment> = mutableListOf()
     private val fragmentTitleList: MutableList<String> = mutableListOf()
 

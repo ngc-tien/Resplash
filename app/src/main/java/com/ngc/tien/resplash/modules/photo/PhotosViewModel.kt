@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
 import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
+import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
+import com.ngc.tien.resplash.modules.core.RequestType
 import com.ngc.tien.resplash.util.getErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,7 +23,8 @@ import javax.inject.Inject
 class PhotosViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val photoRepository: PhotoRepository,
-    private val collectionRepository: CollectionRepository
+    private val collectionRepository: CollectionRepository,
+    private val searchRepository: SearchRepository,
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
@@ -80,7 +83,8 @@ class PhotosViewModel @Inject constructor(
 
     private suspend fun getPhotos(page: Int) : List<Photo> {
         return when(requestType) {
-            RequestType.Collection -> collectionRepository.getCollectionPhotos(requestType.id, page)
+            RequestType.Collection -> collectionRepository.getCollectionPhotos(requestType.query, page)
+            RequestType.Search -> searchRepository.searchPhotos(requestType.query, page)
             else -> photoRepository.getPhotos(page)
         }
     }

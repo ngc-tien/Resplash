@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.http.HttpException
 import com.ngc.tien.resplash.R
 import java.io.IOException
-import java.lang.Exception
 import java.net.UnknownHostException
 
 @SuppressLint("NewApi")

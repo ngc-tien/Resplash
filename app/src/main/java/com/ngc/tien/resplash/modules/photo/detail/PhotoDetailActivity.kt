@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionListenerAdapter
-import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
@@ -30,7 +29,9 @@ import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
+import com.ngc.tien.resplash.modules.search.SearchActivity
 import com.ngc.tien.resplash.util.Constants
+import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_URL
 import com.ngc.tien.resplash.util.ViewUtils
@@ -305,6 +306,9 @@ class PhotoDetailActivity : AppCompatActivity() {
                     text = tag
                 }
                 binding.tags.addView(chip, layoutParams)
+                chip.setOnClickListener {
+                    handleTagClicked(tag)
+                }
             }
         }
     }
@@ -312,6 +316,13 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun renderSetWallpaperMessage(message: String) {
         if (message.isNotEmpty()) {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleTagClicked(tag: String) {
+        Intent(this@PhotoDetailActivity, SearchActivity::class.java).run {
+            putExtra(IntentConstants.KEY_SEARCH_QUERY, tag)
+            startActivity(this)
         }
     }
 
