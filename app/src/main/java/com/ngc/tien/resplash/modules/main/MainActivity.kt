@@ -1,5 +1,6 @@
 package com.ngc.tien.resplash.modules.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionListenerAdapter
@@ -10,6 +11,7 @@ import com.ngc.tien.resplash.databinding.ActivityMainBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.core.BaseViewPagerAdapter
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
+import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.extentions.transparent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,11 +32,13 @@ class MainActivity : AppCompatActivity() {
         setupWindowTransitionAnimation()
     }
 
+    @SuppressLint("WrongConstant")
     private fun setupViews() {
         viewPagerAdapter = BaseViewPagerAdapter(this)
         viewPagerAdapter.addFragment(PhotosFragment(), getString(R.string.home))
         viewPagerAdapter.addFragment(CollectionsFragment(), getString(R.string.collections))
         binding.viewPager.adapter = viewPagerAdapter
+        binding.viewPager.offscreenPageLimit = Constants.MAIN_OFF_SCREEN_PAGE_LIMIT
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = viewPagerAdapter.getPageTitle(position)
         }.attach()

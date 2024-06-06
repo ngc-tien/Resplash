@@ -1,5 +1,6 @@
 package com.ngc.tien.resplash.modules.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.ngc.tien.resplash.databinding.ActivitySearchBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.core.BaseViewPagerAdapter
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
+import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.IntentConstants
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun setupViewPager() {
         val photosFragment = PhotosFragment()
         val collectionFragment = CollectionsFragment()
@@ -60,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(photosFragment, getString(R.string.photos))
         viewPagerAdapter.addFragment(collectionFragment, getString(R.string.collections))
         binding.viewPager.adapter = viewPagerAdapter
-        binding.viewPager.offscreenPageLimit = 2
+        binding.viewPager.offscreenPageLimit = Constants.SEARCH_SCREEN_PAGE_LIMIT
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = viewPagerAdapter.getPageTitle(position)
         }.attach()
