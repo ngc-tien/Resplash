@@ -2,6 +2,7 @@ package com.ngc.tien.resplash.data.remote.mapper.photo
 
 import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
+import java.io.Serializable
 
 data class Photo(
     override val id: String,
@@ -18,11 +19,12 @@ data class Photo(
     val color: String,
     val thumbnailUrl: String,
     val downloadPhotoUrl: String,
+    val linkHtml: String,
     val totalViews: Int,
     val totalDownloads: Int,
     val totalLikes: Int,
     val tags: List<String>
-) : BaseRefreshListItem()
+) : BaseRefreshListItem(), Serializable
 
 fun PhotoResponse.toItem(): Photo {
     return Photo(
@@ -43,6 +45,7 @@ fun PhotoResponse.toItem(): Photo {
         totalViews = views ?: 0,
         totalDownloads = downloads ?: 0,
         totalLikes = likes ?: 0,
+        linkHtml = links?.html ?: "",
         tags = tags?.map {
             it.title
         } ?: emptyList()

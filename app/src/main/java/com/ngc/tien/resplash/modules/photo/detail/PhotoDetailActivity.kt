@@ -27,23 +27,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.google.android.material.chip.Chip
 import com.ngc.tien.resplash.R
+import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
 import com.ngc.tien.resplash.util.Constants
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_COLOR
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_HEIGHT
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_ID
+import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_URL
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_WIDTH
 import com.ngc.tien.resplash.util.ViewUtils
 import com.ngc.tien.resplash.util.extentions.formatNumber
 import com.ngc.tien.resplash.util.extentions.gone
+import com.ngc.tien.resplash.util.extentions.launchUrl
 import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
+import com.ngc.tien.resplash.util.extentions.shareUrl
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class PhotoDetailActivity : AppCompatActivity() {
@@ -51,10 +50,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
     private lateinit var wallpaperDownloadManager: WallpaperDownloadManager
     private lateinit var downloadReceiver: BroadcastReceiver
-    private var photoUrl = ""
-    private var photoWidth = 0
-    private var photoHeight = 0
-    private var photoId = ""
+    private lateinit var photo: Photo
     private var onBackPressed: Boolean = false
     private var photoBitmap: Bitmap? = null
 
@@ -74,24 +70,26 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun loadData() {
         intent?.let {
-            binding.photoImage.setBackgroundColor(Color.parseColor(it.getStringExtra(KEY_PHOTO_COLOR)))
-            binding.userImage.setBackgroundColor(Color.parseColor(it.getStringExtra(KEY_PHOTO_COLOR)))
-            Glide.with(this)
-                .asBitmap()
-                .load(it.getStringExtra(KEY_PHOTO_URL))
-                .into(object : BitmapImageViewTarget(binding.photoImage) {
-                    override fun setResource(resource: Bitmap?) {
-                        photoBitmap = resource
-                        super.setResource(resource)
-                    }
-                })
-            photoUrl = it.getStringExtra(KEY_PHOTO_URL) ?: ""
-            photoWidth = it.getIntExtra(KEY_PHOTO_WIDTH, 0)
-            photoHeight = it.getIntExtra(KEY_PHOTO_HEIGHT, 0)
-            if (viewModel.uiState.value !is PhotoDetailUIState.Content) {
-                photoId = it.getStringExtra(KEY_PHOTO_ID) ?: ""
-                viewModel.getPhoto(photoId)
+            if (it.extras?.containsKey(KEY_PHOTO) == true) {
+                photo = it.getSerializableExtra(KEY_PHOTO, Photo::class.java)!!
+                binding.photoImage.setBackgroundColor(Color.parseColor(photo.color))
+                binding.userImage.setBackgroundColor(Color.parseColor(photo.color))
+                Glide.with(this)
+                    .asBitmap()
+                    .load(photo.thumbnailUrl)
+                    .into(object : BitmapImageViewTarget(binding.photoImage) {
+                        override fun setResource(resource: Bitmap?) {
+                            photoBitmap = resource
+                            super.setResource(resource)
+                        }
+                    })
+                if (viewModel.uiState.value !is PhotoDetailUIState.Content) {
+                    viewModel.getPhoto(photo.id)
+                }
+            } else {
+                finish()
             }
+
         }
         wallpaperDownloadManager = WallpaperDownloadManager()
     }
@@ -119,7 +117,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                     it, Constants.SHARED_PHOTO_TRANSITION_NAME
                 )
                 Intent(this, PhotoZoomActivity::class.java).apply {
-                    putExtra(KEY_PHOTO_URL, photoUrl)
+                    putExtra(KEY_PHOTO_URL, photo.thumbnailUrl)
                     startActivity(this, options.toBundle())
                 }
             }
@@ -140,7 +138,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.errorState.gone()
             binding.photoDetail.gone()
-            viewModel.getPhoto(photoId)
+            viewModel.getPhoto(photo.id)
         }
         addSharedWindowTransitionAnimation()
     }
@@ -149,7 +147,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         val params = binding.photoImage.layoutParams
         var photoWrapperWidth = ViewUtils.getScreenWidth()
         params.width = photoWrapperWidth
-        params.height = ((photoWrapperWidth.toFloat() / photoWidth) * photoHeight).toInt()
+        params.height = ((photoWrapperWidth.toFloat() / photo.width) * photo.height).toInt()
         binding.photoImage.layoutParams = params
         if (photoBitmap != null) {
             binding.photoImage.setImageBitmap(photoBitmap!!)
@@ -203,6 +201,14 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
         binding.setWallpaperButton.setOnClickListener{
             viewModel.setWallpaper()
+        }
+        binding.toolBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.share -> photo.linkHtml.shareUrl(this@PhotoDetailActivity)
+                R.id.viewInDetail -> launchUrl(photo.linkHtml)
+                else -> {}
+            }
+            true
         }
     }
 
@@ -316,6 +322,9 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (viewModel.uiState.value !is PhotoDetailUIState.Loading) {
+            binding.lottieLoading.gone()
+        }
         binding.locationWrapper.transparent(false)
         binding.appBarLayout.transparent(false)
         binding.photoDetail.transparent(false)

@@ -14,6 +14,7 @@ data class Collection(
     val coverHeight: Int,
     val coverUrl: String,
     val coverColor: String,
+    val linkHtml: String,
 ) : BaseRefreshListItem(), Serializable
 
 fun CollectionsResponse.toItem(): Collection {
@@ -26,6 +27,7 @@ fun CollectionsResponse.toItem(): Collection {
         coverWidth = coverPhoto?.width ?: 0,
         coverHeight = coverPhoto?.height ?: 0,
         coverUrl = coverPhoto.urls.regular,
-        coverColor = coverPhoto.color ?: "#E0E0E0"
+        coverColor = coverPhoto.color ?: "#E0E0E0",
+        linkHtml = links.html
     )
 }
