@@ -76,7 +76,7 @@ dependencies {
 
     // Moshi
     implementation libs.moshi
-    implementationlibs.moshi.kotlin
+    implementation libs.moshi.kotlin
 
     // OkHttp
     implementation(libs.okhttp.bom)
