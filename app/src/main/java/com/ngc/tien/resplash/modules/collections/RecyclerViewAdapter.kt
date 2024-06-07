@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.RequestManager
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
+import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.CollectionItemViewLayoutBinding
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
 import com.ngc.tien.resplash.modules.core.BaseRefreshListViewAdapter
@@ -13,6 +14,7 @@ import com.ngc.tien.resplash.modules.core.BaseViewHolder
 
 class RecyclerViewAdapter(
     private val requestManager: RequestManager,
+    private val onUserClick: (user: User) -> Unit,
     private val onItemClick: (collection: Collection, transitionImage: AppCompatImageView) -> Unit
 ) : BaseRefreshListViewAdapter() {
     override fun onCreateViewHolder(
@@ -24,12 +26,13 @@ class RecyclerViewAdapter(
             parent,
             false
         )
-        return ViewHolder(requestManager, binding, onItemClick)
+        return ViewHolder(requestManager, binding, onUserClick, onItemClick)
     }
 
     class ViewHolder(
         private val requestManager: RequestManager,
         private val binding: CollectionItemViewLayoutBinding,
+        private val onUserClick: (user: User) -> Unit,
         private val onItemClick: (collection: Collection, transitionImage: AppCompatImageView) -> Unit
     ) :
         BaseViewHolder(binding) {
@@ -37,7 +40,10 @@ class RecyclerViewAdapter(
             (item as Collection).run {
                 binding.photoNumber.text = "$totalPhotos photos"
                 binding.collectionName.text = title
-                binding.userName.text = userName
+                binding.userName.text = user.name
+                binding.userName.setOnClickListener {
+                    onUserClick(user)
+                }
                 binding.coverImage.setAspectRatioAndColorForThumbnail(
                     coverWidth,
                     coverHeight,
@@ -45,7 +51,7 @@ class RecyclerViewAdapter(
                 )
                 binding.userImage.setBackgroundColor(Color.parseColor(coverColor))
                 requestManager
-                    .load(userImage)
+                    .load(user.profileImageMedium)
                     .into(binding.userImage)
                 requestManager
                     .load(coverUrl)

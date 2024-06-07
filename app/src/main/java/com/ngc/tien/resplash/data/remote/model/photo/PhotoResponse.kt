@@ -2,7 +2,7 @@ package com.ngc.tien.resplash.data.remote.model.photo
 
 
 import androidx.annotation.Keep
-import com.ngc.tien.resplash.data.remote.model.user.User
+import com.ngc.tien.resplash.data.remote.model.user.UserResponse
 import com.squareup.moshi.Json
 
 @Keep
@@ -34,7 +34,7 @@ data class PhotoResponse(
     @Json(name = "liked_by_user")
     val likedByUser: Boolean?, // false
     @Json(name = "user")
-    val user: User?,
+    val userResponse: UserResponse?,
     @Json(name = "exif")
     val exif: Exif?,
     @Json(name = "location")

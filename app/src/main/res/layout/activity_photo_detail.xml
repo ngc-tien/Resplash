@@ -92,38 +92,46 @@
             android:id="@+id/photoDetail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/photoImageWrapper">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/userImageWrapper"
-                android:layout_width="@dimen/user_icon_size"
-                android:layout_height="@dimen/user_icon_size"
-                android:layout_marginHorizontal="@dimen/dimen_16dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/userInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
-                app:cardCornerRadius="@dimen/user_icon_size"
-                app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/userImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/userImageWrapper"
+                    android:layout_width="@dimen/user_icon_size"
+                    android:layout_height="@dimen/user_icon_size"
+                    android:layout_marginHorizontal="@dimen/dimen_16dp"
+                    app:cardCornerRadius="@dimen/user_icon_size"
+                    app:cardElevation="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_12dp"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/userImageWrapper"
-                app:layout_constraintStart_toEndOf="@id/userImageWrapper"
-                app:layout_constraintTop_toTopOf="@id/userImageWrapper" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_12dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/userImageWrapper"
+                    app:layout_constraintStart_toEndOf="@id/userImageWrapper"
+                    app:layout_constraintTop_toTopOf="@id/userImageWrapper" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/downloadPhoto"
@@ -134,9 +142,9 @@
                 android:clickable="true"
                 android:src="@drawable/download_icon"
                 android:tint="@color/color_secondary"
-                app:layout_constraintBottom_toBottomOf="@id/userImageWrapper"
+                app:layout_constraintBottom_toBottomOf="@id/userInfo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/userImageWrapper" />
+                app:layout_constraintTop_toTopOf="@id/userInfo" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="0dp"
@@ -146,7 +154,7 @@
                 android:layout_marginBottom="@dimen/dimen_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userImageWrapper" />
+                app:layout_constraintTop_toBottomOf="@id/userInfo" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/topDivider"
@@ -156,7 +164,7 @@
                 android:layout_marginTop="@dimen/dimen_12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userImageWrapper" />
+                app:layout_constraintTop_toBottomOf="@id/userInfo" />
 
             <TableLayout
                 android:id="@+id/tableLayoutSpecs"

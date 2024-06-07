@@ -1,5 +1,7 @@
 package com.ngc.tien.resplash.data.remote.mapper.collection
 
+import com.ngc.tien.resplash.data.remote.mapper.user.User
+import com.ngc.tien.resplash.data.remote.mapper.user.toItem
 import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
 import java.io.Serializable
@@ -7,8 +9,7 @@ import java.io.Serializable
 data class Collection(
     override val id: String,
     val title: String,
-    val userName: String,
-    val userImage: String,
+    val user: User,
     val totalPhotos: Int,
     val coverWidth: Int,
     val coverHeight: Int,
@@ -22,8 +23,7 @@ fun CollectionsResponse.toItem(): Collection {
         id = id,
         title = title,
         totalPhotos = totalPhotos,
-        userName = user.name,
-        userImage = user.profileImage.medium,
+        user = user.toItem(),
         coverWidth = coverPhoto?.width ?: 0,
         coverHeight = coverPhoto?.height ?: 0,
         coverUrl = coverPhoto.urls.regular,

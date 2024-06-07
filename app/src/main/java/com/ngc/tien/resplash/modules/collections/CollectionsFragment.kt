@@ -16,6 +16,7 @@ class CollectionsFragment : BaseRefreshListFragment() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecyclerViewAdapter(
             Glide.with(this@CollectionsFragment),
+            ::handleUserClick,
             ::handleItemClick
         )
     }
@@ -29,6 +30,10 @@ class CollectionsFragment : BaseRefreshListFragment() {
                 if (containsKey(IntentConstants.KEY_SEARCH_QUERY)) {
                     requestType = RequestType.Search
                     requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
+                    binding.swipeRefreshLayout.isEnabled = false
+                } else if (containsKey(IntentConstants.KEY_USER_COLLECTIONS)) {
+                    requestType = RequestType.UserCollections
+                    requestType.query = getString(IntentConstants.KEY_USER_COLLECTIONS)!!
                     binding.swipeRefreshLayout.isEnabled = false
                 }
             }

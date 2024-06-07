@@ -27,9 +27,10 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.google.android.material.chip.Chip
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
+import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
-import com.ngc.tien.resplash.modules.search.SearchActivity
+import com.ngc.tien.resplash.modules.user.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO
@@ -127,9 +128,9 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.downloadPhoto.setOnClickListener {
             val uiState = viewModel.uiState.value as PhotoDetailUIState.Content
             val fileName = uiState.item.run {
-                userName.lowercase().replace(" ", "-") + "-" + id + ".png"
+                user.name.lowercase().replace(" ", "-") + "-" + id + ".png"
             }
-            val downloadId = wallpaperDownloadManager.downloadFile(
+            wallpaperDownloadManager.downloadFile(
                 this@PhotoDetailActivity,
                 fileName,
                 "Downloading $fileName",
@@ -141,6 +142,13 @@ class PhotoDetailActivity : AppCompatActivity() {
             binding.errorState.gone()
             binding.photoDetail.gone()
             viewModel.getPhoto(photo.id)
+        }
+        binding.userInfo.setOnClickListener {
+            val uiState = viewModel.uiState.value as PhotoDetailUIState.Content
+            Intent(this@PhotoDetailActivity, UserDetailActivity::class.java).run {
+                putExtra(IntentConstants.KEY_USER, uiState.item.user)
+                startActivity(this)
+            }
         }
         addSharedWindowTransitionAnimation()
     }
@@ -286,10 +294,10 @@ class PhotoDetailActivity : AppCompatActivity() {
             binding.locationWrapper.gone()
         }
         Glide.with(this)
-            .load(item.userImage)
+            .load(item.user.profileImageMedium)
             .into(binding.userImage)
         item.run {
-            binding.userName.text = userName
+            binding.userName.text = item.user.name
             binding.txtCamera.text = camInfo
             binding.txtAperture.text = aperture
             binding.txtFocalLength.text = focalLength

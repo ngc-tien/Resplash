@@ -58,7 +58,12 @@
     <style name="Theme.ResplashClone.PhotoDetail.AppBarLayout.ActionButton" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:tint">@color/white</item>
     </style>
+
     <style name="Theme.ResplashClone.CollectionDetail.AppBarLayout.ActionButton" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:tint">@color/color_secondary</item>
+    </style>
+
+    <style name="Theme.ResplashClone.UserDetailTabLayout">
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

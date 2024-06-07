@@ -1,13 +1,14 @@
 package com.ngc.tien.resplash.data.remote.mapper.photo
 
+import com.ngc.tien.resplash.data.remote.mapper.user.User
+import com.ngc.tien.resplash.data.remote.mapper.user.toItem
 import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
 import java.io.Serializable
 
 data class Photo(
     override val id: String,
-    val userName: String,
-    val userImage: String,
+    val user: User,
     val location: String,
     val camInfo: String,
     val aperture: String,
@@ -29,8 +30,7 @@ data class Photo(
 fun PhotoResponse.toItem(): Photo {
     return Photo(
         id = id,
-        userName = user?.name ?: "",
-        userImage = user?.profileImage?.medium ?: "",
+        user = userResponse?.toItem() ?: User.emptyUser(),
         location = location?.name ?: "",
         camInfo = exif?.name ?: "Unknown",
         aperture = exif?.aperture ?: "Unknown",

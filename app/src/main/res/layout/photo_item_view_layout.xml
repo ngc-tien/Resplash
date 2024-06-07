@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -21,14 +22,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@id/userImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/userImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/txtUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_16dp"
@@ -39,45 +40,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/coverImageWrapper"
+        android:id="@+id/photoImageWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_16dp"
-        app:cardCornerRadius="@dimen/dimen_16dp"
+        app:cardCornerRadius="@dimen/dimen_8dp"
         app:cardElevation="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userInfo">
 
         <com.ngc.tien.resplash.modules.widget.AspectRatioImageView
-            android:id="@+id/coverImage"
+            android:id="@+id/photoImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:foreground="@drawable/collection_gradient_overlay"
-            android:minHeight="@dimen/collection_image_min_height"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter"
+            android:transitionName="photo_transition" />
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/collectionName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dimen_16dp"
-        android:layout_marginBottom="@dimen/dimen_12dp"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/photoNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/photoNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen_16dp"
-        android:text="54 Photos"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/collectionName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

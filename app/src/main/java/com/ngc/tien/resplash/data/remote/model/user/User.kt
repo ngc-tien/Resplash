@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
 @Keep
-data class User(
+data class UserResponse(
     @Json(name = "id")
     val id: String, // PN0aWWIssaM
     @Json(name = "updated_at")

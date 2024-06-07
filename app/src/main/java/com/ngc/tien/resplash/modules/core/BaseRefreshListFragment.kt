@@ -1,5 +1,6 @@
 package com.ngc.tien.resplash.modules.core
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
@@ -7,8 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
+import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.RefreshListItemFragmentLayoutBinding
+import com.ngc.tien.resplash.modules.user.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
+import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
@@ -110,5 +114,12 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         binding.lottieLoading.playAndShow()
         binding.errorState.gone()
         recyclerViewAdapter.submitList(emptyList())
+    }
+
+    fun handleUserClick(user: User) {
+        Intent(requireActivity(), UserDetailActivity::class.java).run {
+            putExtra(IntentConstants.KEY_USER, user)
+            startActivity(this)
+        }
     }
 }

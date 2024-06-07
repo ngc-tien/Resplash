@@ -16,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ResplashClone">
         <activity
+            android:name=".modules.user.UserDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".modules.search.SearchActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".modules.collections.detail.CollectionDetailActivity"
             android:exported="false" />
@@ -42,6 +45,7 @@
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

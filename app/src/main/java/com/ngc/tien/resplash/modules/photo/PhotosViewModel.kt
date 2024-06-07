@@ -9,6 +9,7 @@ import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
 import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
 import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
+import com.ngc.tien.resplash.data.remote.repositories.user.UserRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -25,6 +26,7 @@ class PhotosViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val collectionRepository: CollectionRepository,
     private val searchRepository: SearchRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
@@ -81,10 +83,16 @@ class PhotosViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPhotos(page: Int) : List<Photo> {
-        return when(requestType) {
-            RequestType.Collection -> collectionRepository.getCollectionPhotos(requestType.query, page)
+    private suspend fun getPhotos(page: Int): List<Photo> {
+        return when (requestType) {
+            RequestType.Collection -> collectionRepository.getCollectionPhotos(
+                requestType.query,
+                page
+            )
+
             RequestType.Search -> searchRepository.searchPhotos(requestType.query, page)
+            RequestType.UserPhotos -> userRepository.getPhotos(requestType.query, page)
+            RequestType.UserLikes -> userRepository.getLikePhotos(requestType.query, page)
             else -> photoRepository.getPhotos(page)
         }
     }

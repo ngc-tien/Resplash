@@ -14,4 +14,5 @@
     <dimen name="home_item_image_min_height">150dp</dimen>
     <dimen name="collection_image_min_height">250dp</dimen>
     <dimen name="photo_detail_min_height">250dp</dimen>
+    <dimen name="user_detail_profile_image_size">84dp</dimen>
 </resources>

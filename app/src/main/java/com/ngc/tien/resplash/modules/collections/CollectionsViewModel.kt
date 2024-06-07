@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
 import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
+import com.ngc.tien.resplash.data.remote.repositories.user.UserRepository
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState.NextPageState
 import com.ngc.tien.resplash.modules.core.IBaseRefreshListViewModel
@@ -23,6 +24,7 @@ class CollectionsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val collectionRepository: CollectionRepository,
     private val searchRepository: SearchRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel(), IBaseRefreshListViewModel {
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
@@ -81,6 +83,7 @@ class CollectionsViewModel @Inject constructor(
     private suspend fun getCollections(page: Int): List<Collection> {
         return when (requestType) {
             RequestType.Search -> searchRepository.searchCollections(requestType.query, page)
+            RequestType.UserCollections -> userRepository.getCollections(requestType.query, page)
             else -> collectionRepository.getCollections(page)
         }
     }

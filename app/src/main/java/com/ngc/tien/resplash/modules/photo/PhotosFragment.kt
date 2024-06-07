@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PhotosFragment : BaseRefreshListFragment() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecyclerViewAdapter(Glide.with(this@PhotosFragment),
+            ::handleUserClick,
             ::handleItemClick)
     }
 
@@ -34,6 +35,14 @@ class PhotosFragment : BaseRefreshListFragment() {
                 } else if (containsKey(IntentConstants.KEY_SEARCH_QUERY)) {
                     requestType = RequestType.Search
                     requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
+                    binding.swipeRefreshLayout.isEnabled = false
+                }  else if (containsKey(IntentConstants.KEY_USER_PHOTOS)) {
+                    requestType = RequestType.UserPhotos
+                    requestType.query = getString(IntentConstants.KEY_USER_PHOTOS)!!
+                    binding.swipeRefreshLayout.isEnabled = false
+                } else if (containsKey(IntentConstants.KEY_USER_LIKES)) {
+                    requestType = RequestType.UserLikes
+                    requestType.query = getString(IntentConstants.KEY_USER_LIKES)!!
                     binding.swipeRefreshLayout.isEnabled = false
                 }
             }

@@ -57,4 +57,25 @@ interface ResplashApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
     ): SearchCollectionsResponse
+
+    @GET("users/{username}/photos")
+    suspend fun getUserPhotos(
+        @Path("username") username: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+    ): List<PhotoResponse>
+
+    @GET("users/{username}/likes")
+    suspend fun getUserLikePhotos(
+        @Path("username") username: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+    ): List<PhotoResponse>
+
+    @GET("users/{username}/collections")
+    suspend fun getUserCollections(
+        @Path("username") username: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+    ): List<CollectionsResponse>
 }
