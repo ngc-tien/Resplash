@@ -3,7 +3,7 @@ package com.ngc.tien.resplash.modules.user.search
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.children
+import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.RequestManager
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.mapper.user.User
@@ -17,7 +17,7 @@ import com.ngc.tien.resplash.util.extentions.visible
 class RecyclerViewAdapter(
     private val requestManager: RequestManager,
     private val onUserClick: (user: User) -> Unit,
-    private val onPhotoClick: (photo: Photo) -> Unit
+    private val onPhotoClick: (photo: Photo, transitionImage: AppCompatImageView) -> Unit
 ) : BaseRefreshListViewAdapter() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,7 +35,7 @@ class RecyclerViewAdapter(
         private val requestManager: RequestManager,
         private val binding: SearchUserItemLayoutBinding,
         private val onUserClick: (user: User) -> Unit,
-        private val onPhotoClick: (photo: Photo) -> Unit
+        private val onPhotoClick: (photo: Photo, transitionImage: AppCompatImageView) -> Unit
     ) :
         BaseViewHolder(binding) {
         override fun bind(item: BaseRefreshListItem) {
@@ -47,31 +47,27 @@ class RecyclerViewAdapter(
                 }
                 binding.userImage.setBackgroundColor(Color.parseColor("#E0E0E0"))
                 requestManager
-                    .load(profileImageMedium)
+                    .load(profileImageLarge)
                     .into(binding.userImage)
                 if (photos == null || photos!!.size < 3) {
                     binding.photos.gone()
                 } else {
                     binding.photos.visible()
-                    binding.photos.children.forEachIndexed { index, view ->
-                        requestManager.clear(view)
-                        view.setOnClickListener {
-                            onPhotoClick(photos[index])
-                        }
-                    }
-                    requestManager
-                        .load(photos[0].thumbnailMediumUrl)
-                        .into(binding.photo1)
-                    requestManager
-                        .load(photos[1].thumbnailMediumUrl)
-                        .into(binding.photo2)
-                    requestManager
-                        .load(photos[2].thumbnailMediumUrl)
-                        .into(binding.photo3)
+                    bindingPhoto(binding.photo1, photos[0])
+                    bindingPhoto(binding.photo2, photos[1])
+                    bindingPhoto(binding.photo3, photos[2])
                 }
-
             }
+        }
 
+        private fun bindingPhoto(imageView: AppCompatImageView, photo: Photo) {
+            requestManager
+                .load(photo.thumbnailMediumUrl)
+                .into(imageView)
+            imageView.setBackgroundColor(Color.parseColor("#E0E0E0"))
+            imageView.setOnClickListener{
+                onPhotoClick(photo, imageView)
+            }
         }
     }
 }

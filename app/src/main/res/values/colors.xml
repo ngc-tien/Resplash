@@ -30,4 +30,6 @@
     <color name="color_on_surface_disabled">#60000000</color>
 
     <color name="immersive_sys_ui">#33000000</color>
+
+    <color name="search_user_default_bg_color">#E0E0E0</color>
 </resources>

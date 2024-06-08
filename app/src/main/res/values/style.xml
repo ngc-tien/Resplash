@@ -5,4 +5,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="SearchUserPhotoRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dimen_8dp</item>
+    </style>
 </resources>

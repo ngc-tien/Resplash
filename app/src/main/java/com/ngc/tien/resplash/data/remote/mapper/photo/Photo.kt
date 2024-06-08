@@ -40,7 +40,7 @@ fun PhotoResponse.toItem(): Photo {
         iso = exif?.iso?.toString() ?: "Unknown",
         width = width ?: 0,
         height = height ?: 0,
-        thumbnailMediumUrl = urls.thumb,
+        thumbnailMediumUrl = urls.small,
         thumbnailRegularUrl = urls.regular,
         downloadPhotoUrl = urls.full,
         color = color ?: "#E0E0E0",
