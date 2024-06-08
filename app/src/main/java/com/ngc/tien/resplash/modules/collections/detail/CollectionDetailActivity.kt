@@ -1,15 +1,18 @@
 package com.ngc.tien.resplash.modules.collections.detail
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.databinding.ActivityCollectionDetailBinding
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
+import com.ngc.tien.resplash.modules.user.UserDetailActivity
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.launchUrl
 import com.ngc.tien.resplash.util.extentions.replaceFragment
 import com.ngc.tien.resplash.util.extentions.shareUrl
+import com.ngc.tien.resplash.util.extentions.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,6 +68,18 @@ class CollectionDetailActivity : AppCompatActivity() {
                 else -> {}
             }
             true
+        }
+        if (collection.description.isNotEmpty()) {
+            binding.description.visible()
+            binding.description.text = collection.description
+        }
+        binding.totalPhotos.text = collection.totalPhotos.toString()
+        binding.user.text = collection.user.name
+        binding.user.setOnClickListener {
+            Intent(this, UserDetailActivity::class.java).run {
+                putExtra(IntentConstants.KEY_USER, collection.user)
+                startActivity(this)
+            }
         }
     }
 }
