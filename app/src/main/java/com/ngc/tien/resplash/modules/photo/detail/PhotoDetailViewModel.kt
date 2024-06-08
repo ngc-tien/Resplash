@@ -29,6 +29,7 @@ class PhotoDetailViewModel @Inject constructor(
     val setWallpaperMessage: LiveData<String> get() = _setWallpaperMessage
 
     var isTransitionFinished = false
+    var isTransitionWork = false
 
     fun getPhoto(id: String) {
         viewModelScope.launch {

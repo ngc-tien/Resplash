@@ -1,6 +1,7 @@
 package com.ngc.tien.resplash.data.remote.model.user
 
 import androidx.annotation.Keep
+import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.squareup.moshi.Json
 
 @Keep
@@ -48,7 +49,9 @@ data class UserResponse(
     @Json(name = "for_hire")
     val forHire: Boolean, // true
     @Json(name = "social")
-    val social: Social
+    val social: Social,
+    @Json(name = "photos")
+    val photos: List<PhotoResponse>?
 )
 
 @Keep

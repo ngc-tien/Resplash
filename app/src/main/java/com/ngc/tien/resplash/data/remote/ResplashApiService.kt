@@ -4,6 +4,7 @@ import com.ngc.tien.resplash.data.remote.model.collection.CollectionsResponse
 import com.ngc.tien.resplash.data.remote.model.photo.PhotoResponse
 import com.ngc.tien.resplash.data.remote.model.search.SearchCollectionsResponse
 import com.ngc.tien.resplash.data.remote.model.search.SearchPhotosResponse
+import com.ngc.tien.resplash.data.remote.model.search.SearchUsersResponse
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
@@ -57,6 +58,13 @@ interface ResplashApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
     ): SearchCollectionsResponse
+
+    @GET("/search/users")
+    suspend fun searchUsers(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
+    ): SearchUsersResponse
 
     @GET("users/{username}/photos")
     suspend fun getUserPhotos(

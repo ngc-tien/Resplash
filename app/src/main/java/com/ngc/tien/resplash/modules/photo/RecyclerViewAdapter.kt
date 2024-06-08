@@ -50,7 +50,7 @@ class RecyclerViewAdapter(
                     .load(user.profileImageMedium)
                     .into(binding.userImage)
                 requestManager
-                    .load(thumbnailUrl)
+                    .load(thumbnailRegularUrl)
                     .into(binding.photoImage)
                 itemView.setOnClickListener {
                     onItemClick(item, binding.photoImage)

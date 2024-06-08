@@ -1,5 +1,7 @@
 package com.ngc.tien.resplash.data.remote.mapper.user
 
+import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
+import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
 import com.ngc.tien.resplash.data.remote.model.user.UserResponse
 import com.ngc.tien.resplash.modules.core.BaseRefreshListItem
 import java.io.Serializable
@@ -15,6 +17,7 @@ data class User(
     val totalLikes: Int,
     val totalCollections: Int,
     val totalPhotos: Int,
+    val photos: List<Photo>
 ) : BaseRefreshListItem(), Serializable {
     companion object {
         fun emptyUser(): User {
@@ -28,7 +31,8 @@ data class User(
                 "",
                 0,
                 0,
-                0
+                0,
+                emptyList()
             )
         }
     }
@@ -45,6 +49,7 @@ fun UserResponse.toItem(): User {
         profileImageLarge = profileImage.large,
         totalLikes = totalLikes,
         totalCollections = totalCollections,
-        totalPhotos = totalPhotos
+        totalPhotos = totalPhotos,
+        photos = photos?.map { it.toItem() } ?: emptyList()
     )
 }

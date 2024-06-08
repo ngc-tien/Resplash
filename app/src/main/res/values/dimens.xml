@@ -15,4 +15,6 @@
     <dimen name="collection_image_min_height">250dp</dimen>
     <dimen name="photo_detail_min_height">250dp</dimen>
     <dimen name="user_detail_profile_image_size">84dp</dimen>
+    <dimen name="search_user_profile_image_size">48dp</dimen>
+    <dimen name="search_user_photos_height">120dp</dimen>
 </resources>

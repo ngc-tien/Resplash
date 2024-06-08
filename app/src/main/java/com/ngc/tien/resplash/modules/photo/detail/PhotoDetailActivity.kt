@@ -27,7 +27,6 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.google.android.material.chip.Chip
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
-import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
 import com.ngc.tien.resplash.modules.user.UserDetailActivity
@@ -79,7 +78,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 binding.userImage.setBackgroundColor(Color.parseColor(photo.color))
                 Glide.with(this)
                     .asBitmap()
-                    .load(photo.thumbnailUrl)
+                    .load(photo.thumbnailRegularUrl)
                     .into(object : BitmapImageViewTarget(binding.photoImage) {
                         override fun setResource(resource: Bitmap?) {
                             photoBitmap = resource
@@ -120,7 +119,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                     it, Constants.SHARED_PHOTO_TRANSITION_NAME
                 )
                 Intent(this, PhotoZoomActivity::class.java).apply {
-                    putExtra(KEY_PHOTO_URL, photo.thumbnailUrl)
+                    putExtra(KEY_PHOTO_URL, photo.thumbnailRegularUrl)
                     startActivity(this, options.toBundle())
                 }
             }
@@ -184,6 +183,9 @@ class PhotoDetailActivity : AppCompatActivity() {
         // shared enter/return is used to handle transition between PhotoDetail and HomeFragment
         // shared exit transition is used to handle transition between PhotoDetail and PhotoZoom
         sharedEnterTransitionListener = object : TransitionListenerAdapter() {
+            override fun onTransitionStart(transition: Transition?) {
+                viewModel.isTransitionWork = true
+            }
             override fun onTransitionEnd(transition: Transition?) {
                 viewModel.isTransitionFinished = true
                 renderUiState(viewModel.uiState.value)
@@ -276,7 +278,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun renderPhotoDetail(uiState: PhotoDetailUIState.Content) {
-        if (!viewModel.isTransitionFinished) {
+        if (viewModel.isTransitionWork && !viewModel.isTransitionFinished) {
             binding.photoDetail.gone()
             return
         }
