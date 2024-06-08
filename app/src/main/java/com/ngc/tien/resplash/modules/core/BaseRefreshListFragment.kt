@@ -1,6 +1,5 @@
 package com.ngc.tien.resplash.modules.core
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
@@ -10,13 +9,12 @@ import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.RefreshListItemFragmentLayoutBinding
-import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
-import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.visible
+import com.ngc.tien.resplash.util.helper.LauncherHelper
 
 abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLayoutBinding>(
     RefreshListItemFragmentLayoutBinding::inflate
@@ -120,14 +118,10 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         if (getCurrentUserId() == user.id) {
             return
         }
-
-        Intent(requireActivity(), UserDetailActivity::class.java).run {
-            putExtra(IntentConstants.KEY_USER, user)
-            startActivity(this)
-        }
+        LauncherHelper.launchUserDetailPage(requireActivity(), user)
     }
 
-    open fun getCurrentUserId() : String {
+    open fun getCurrentUserId(): String {
         return ""
     }
 }

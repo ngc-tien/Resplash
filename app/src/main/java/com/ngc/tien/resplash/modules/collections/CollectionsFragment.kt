@@ -5,7 +5,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
-import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.modules.collections.detail.CollectionDetailActivity
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.core.RequestType
