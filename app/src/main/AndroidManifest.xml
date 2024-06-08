@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ResplashClone">
         <activity
-            android:name=".modules.user.UserDetailActivity"
+            android:name=".modules.user.detail.UserDetailActivity"
             android:exported="false" />
         <activity
             android:name=".modules.search.SearchActivity"

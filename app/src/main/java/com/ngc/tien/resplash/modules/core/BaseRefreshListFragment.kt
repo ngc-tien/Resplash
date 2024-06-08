@@ -10,7 +10,7 @@ import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.RefreshListItemFragmentLayoutBinding
-import com.ngc.tien.resplash.modules.user.UserDetailActivity
+import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone

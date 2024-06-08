@@ -29,7 +29,7 @@ import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
-import com.ngc.tien.resplash.modules.user.UserDetailActivity
+import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.user.UserDetailActivity">
+    tools:context=".modules.user.detail.UserDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -52,6 +52,7 @@
                     app:layout_constraintTop_toTopOf="@id/profileImageWrapper">
 
                     <LinearLayout
+                        android:id="@+id/photosContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -73,6 +74,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/likesContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -94,6 +96,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/collectionsContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -119,7 +122,7 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_12dp"
+                    android:paddingVertical="@dimen/dimen_12dp"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +132,6 @@
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/name" />
 
@@ -137,7 +139,7 @@
                     android:id="@+id/bio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/dimen_16dp"
+                    android:paddingVertical="@dimen/dimen_16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/location" />

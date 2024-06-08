@@ -1,7 +1,8 @@
-package com.ngc.tien.resplash.modules.user
+package com.ngc.tien.resplash.modules.user.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
@@ -46,7 +47,11 @@ class UserDetailActivity : AppCompatActivity() {
             this.user = user
             binding.toolbar.title = user.userName
             binding.name.text = user.name
-            binding.bio.text = user.bio
+            if (user.bio.isNotEmpty()) {
+                binding.bio.text = user.bio
+            } else {
+                binding.bio.gone()
+            }
             if (user.location.isNotEmpty()) {
                 binding.location.text = user.location
             } else {
@@ -55,8 +60,17 @@ class UserDetailActivity : AppCompatActivity() {
             binding.totalLikes.text = user.totalLikes.toString()
             binding.totalPhotos.text = user.totalPhotos.toString()
             binding.totalCollections.text = user.totalCollections.toString()
+            selectedPage(binding.photosContainer, 0)
+            selectedPage(binding.likesContainer, 1)
+            selectedPage(binding.collectionsContainer, 2)
             Glide.with(this).load(user.profileImageMedium).into(binding.profileImage)
             setupViewPager()
+        }
+    }
+
+    private fun selectedPage(view: View, selectedIndex: Int) {
+        view.setOnClickListener{
+            binding.viewPager.setCurrentItem(selectedIndex, false)
         }
     }
 

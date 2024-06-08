@@ -7,7 +7,7 @@ import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.databinding.ActivityCollectionDetailBinding
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
-import com.ngc.tien.resplash.modules.user.UserDetailActivity
+import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.launchUrl
 import com.ngc.tien.resplash.util.extentions.replaceFragment
