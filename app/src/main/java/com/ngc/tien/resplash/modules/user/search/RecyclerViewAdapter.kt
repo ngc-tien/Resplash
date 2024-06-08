@@ -62,7 +62,7 @@ class RecyclerViewAdapter(
 
         private fun bindingPhoto(imageView: AppCompatImageView, photo: Photo) {
             requestManager
-                .load(photo.thumbnailRegularUrl)
+                .load(photo.thumbnailSmallUrl)
                 .thumbnail(requestManager.load(photo.thumbnailUrl))
                 .into(imageView)
             imageView.setBackgroundColor(Color.parseColor("#E0E0E0"))
