@@ -36,12 +36,14 @@ class PhotosFragment : BaseRefreshListFragment() {
                     requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
                     binding.swipeRefreshLayout.isEnabled = false
                 } else if (containsKey(IntentConstants.KEY_USER_PHOTOS)) {
+                    user = getSerializable(IntentConstants.KEY_USER_PHOTOS, User::class.java)
                     requestType = RequestType.UserPhotos
-                    requestType.query = getString(IntentConstants.KEY_USER_PHOTOS)!!
+                    requestType.query = user!!.userName
                     binding.swipeRefreshLayout.isEnabled = false
                 } else if (containsKey(IntentConstants.KEY_USER_LIKES)) {
+                    user = getSerializable(IntentConstants.KEY_USER_LIKES, User::class.java)
                     requestType = RequestType.UserLikes
-                    requestType.query = getString(IntentConstants.KEY_USER_LIKES)!!
+                    requestType.query = user!!.userName
                     binding.swipeRefreshLayout.isEnabled = false
                 }
             }
@@ -62,13 +64,5 @@ class PhotosFragment : BaseRefreshListFragment() {
 
     private fun handleItemClick(photo: Photo, transitionImage: AppCompatImageView) {
         LauncherHelper.launchPhotoDetailPage(requireActivity(), photo, transitionImage)
-    }
-
-    override fun getCurrentUserId(): String {
-        return if (viewModel.requestType == RequestType.UserPhotos || viewModel.requestType == RequestType.UserLikes) {
-            viewModel.requestType.query
-        } else {
-            super.getCurrentUserId()
-        }
     }
 }

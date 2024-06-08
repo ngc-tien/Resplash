@@ -94,7 +94,7 @@ class UserDetailActivity : AppCompatActivity() {
     private fun addUserPhotoFragment() {
         val fragment = PhotosFragment()
         val bundle = Bundle().apply {
-            putString(IntentConstants.KEY_USER_PHOTOS, user.userName)
+            putSerializable(IntentConstants.KEY_USER_PHOTOS, user)
         }
         fragment.arguments = bundle
         viewPagerAdapter.addFragment(fragment, getString(R.string.photos))
@@ -103,7 +103,7 @@ class UserDetailActivity : AppCompatActivity() {
     private fun addLikePhotosFragment() {
         val fragment = PhotosFragment()
         val bundle = Bundle().apply {
-            putString(IntentConstants.KEY_USER_LIKES, user.userName)
+            putSerializable(IntentConstants.KEY_USER_LIKES, user)
         }
         fragment.arguments = bundle
         viewPagerAdapter.addFragment(fragment, getString(R.string.likes))
@@ -112,7 +112,7 @@ class UserDetailActivity : AppCompatActivity() {
     private fun addCollectionFragment() {
         val fragment = CollectionsFragment()
         val bundle = Bundle().apply {
-            putString(IntentConstants.KEY_USER_COLLECTIONS, user.userName)
+            putSerializable(IntentConstants.KEY_USER_COLLECTIONS, user)
         }
         fragment.arguments = bundle
         viewPagerAdapter.addFragment(fragment, getString(R.string.collections))

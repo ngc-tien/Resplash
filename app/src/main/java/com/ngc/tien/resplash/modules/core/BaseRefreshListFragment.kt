@@ -22,6 +22,7 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
     private var isRefreshing = false
     abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
     abstract val viewModel: IBaseRefreshListViewModel
+    internal var user:User? = null
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,13 +116,9 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
     }
 
     open fun handleUserClick(user: User) {
-        if (getCurrentUserId() == user.id) {
+        if (this.user != null && this.user!!.id == user.id) {
             return
         }
         LauncherHelper.launchUserDetailPage(requireActivity(), user)
-    }
-
-    open fun getCurrentUserId(): String {
-        return ""
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
+import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.modules.collections.detail.CollectionDetailActivity
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.core.RequestType
@@ -32,8 +33,9 @@ class CollectionsFragment : BaseRefreshListFragment() {
                     requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
                     binding.swipeRefreshLayout.isEnabled = false
                 } else if (containsKey(IntentConstants.KEY_USER_COLLECTIONS)) {
+                    user = getSerializable(IntentConstants.KEY_USER_COLLECTIONS, User::class.java)
                     requestType = RequestType.UserCollections
-                    requestType.query = getString(IntentConstants.KEY_USER_COLLECTIONS)!!
+                    requestType.query = user!!.userName
                     binding.swipeRefreshLayout.isEnabled = false
                 }
             }
@@ -49,14 +51,6 @@ class CollectionsFragment : BaseRefreshListFragment() {
         Intent(requireActivity(), CollectionDetailActivity::class.java).run {
             putExtra(IntentConstants.KEY_COLLECTION, collection)
             startActivity(this)
-        }
-    }
-
-    override fun getCurrentUserId(): String {
-        return if (viewModel.requestType == RequestType.UserCollections) {
-            viewModel.requestType.query
-        } else {
-            super.getCurrentUserId()
         }
     }
 }
