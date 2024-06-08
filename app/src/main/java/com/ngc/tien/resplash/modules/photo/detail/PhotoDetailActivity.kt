@@ -79,6 +79,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 Glide.with(this)
                     .asBitmap()
                     .load(photo.thumbnailRegularUrl)
+                    .thumbnail(Glide.with(this).asBitmap().load(photo.thumbnailUrl))
                     .into(object : BitmapImageViewTarget(binding.photoImage) {
                         override fun setResource(resource: Bitmap?) {
                             photoBitmap = resource
@@ -186,6 +187,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             override fun onTransitionStart(transition: Transition?) {
                 viewModel.isTransitionWork = true
             }
+
             override fun onTransitionEnd(transition: Transition?) {
                 viewModel.isTransitionFinished = true
                 renderUiState(viewModel.uiState.value)
@@ -211,7 +213,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.toolBar.menu.forEach { menu ->
             menu.icon?.setTint(resources.getColor(R.color.white, null))
         }
-        binding.setWallpaperButton.setOnClickListener{
+        binding.setWallpaperButton.setOnClickListener {
             viewModel.setWallpaper()
         }
         binding.toolBar.setOnMenuItemClickListener {
@@ -272,6 +274,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 binding.appBarLayout.visible()
                 binding.errorStateMessage.text = uiState.message
             }
+
             is PhotoDetailUIState.Loading -> binding.lottieLoading.playAndShow()
             else -> {}
         }

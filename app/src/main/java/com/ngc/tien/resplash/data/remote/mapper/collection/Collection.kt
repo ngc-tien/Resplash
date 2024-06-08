@@ -13,6 +13,7 @@ data class Collection(
     val totalPhotos: Int,
     val coverWidth: Int,
     val coverHeight: Int,
+    val coverThumbnail: String,
     val coverUrl: String,
     val coverColor: String,
     val linkHtml: String,
@@ -26,6 +27,7 @@ fun CollectionsResponse.toItem(): Collection {
         user = user.toItem(),
         coverWidth = coverPhoto?.width ?: 0,
         coverHeight = coverPhoto?.height ?: 0,
+        coverThumbnail = coverPhoto.urls.thumb,
         coverUrl = coverPhoto.urls.regular,
         coverColor = coverPhoto.color ?: "#E0E0E0",
         linkHtml = links.html

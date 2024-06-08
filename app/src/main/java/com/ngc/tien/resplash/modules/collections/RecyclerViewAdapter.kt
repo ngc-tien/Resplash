@@ -55,6 +55,7 @@ class RecyclerViewAdapter(
                     .into(binding.userImage)
                 requestManager
                     .load(coverUrl)
+                    .thumbnail(requestManager.load(coverThumbnail))
                     .into(binding.coverImage)
                 binding.coverImage.setOnClickListener {
                     onItemClick(item, binding.coverImage)
