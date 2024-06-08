@@ -116,10 +116,18 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         recyclerViewAdapter.submitList(emptyList())
     }
 
-    fun handleUserClick(user: User) {
+    open fun handleUserClick(user: User) {
+        if (getCurrentUserId() == user.id) {
+            return
+        }
+
         Intent(requireActivity(), UserDetailActivity::class.java).run {
             putExtra(IntentConstants.KEY_USER, user)
             startActivity(this)
         }
+    }
+
+    open fun getCurrentUserId() : String {
+        return ""
     }
 }

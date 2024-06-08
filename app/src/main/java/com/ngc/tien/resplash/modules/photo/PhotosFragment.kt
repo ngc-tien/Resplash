@@ -6,6 +6,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
+import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.core.RequestType
 import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity
@@ -18,9 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PhotosFragment : BaseRefreshListFragment() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        RecyclerViewAdapter(Glide.with(this@PhotosFragment),
+        RecyclerViewAdapter(
+            Glide.with(this@PhotosFragment),
             ::handleUserClick,
-            ::handleItemClick)
+            ::handleItemClick
+        )
     }
 
     override val viewModel by viewModels<PhotosViewModel>()
@@ -36,7 +39,7 @@ class PhotosFragment : BaseRefreshListFragment() {
                     requestType = RequestType.Search
                     requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
                     binding.swipeRefreshLayout.isEnabled = false
-                }  else if (containsKey(IntentConstants.KEY_USER_PHOTOS)) {
+                } else if (containsKey(IntentConstants.KEY_USER_PHOTOS)) {
                     requestType = RequestType.UserPhotos
                     requestType.query = getString(IntentConstants.KEY_USER_PHOTOS)!!
                     binding.swipeRefreshLayout.isEnabled = false
@@ -51,6 +54,16 @@ class PhotosFragment : BaseRefreshListFragment() {
         super.initData()
     }
 
+    override fun handleUserClick(user: User) {
+        if (viewModel.requestType == RequestType.UserPhotos || viewModel.requestType == RequestType.UserLikes) {
+            if (viewModel.requestType.query != user.id) {
+                super.handleUserClick(user)
+            }
+        } else {
+            super.handleUserClick(user)
+        }
+    }
+
     private fun handleItemClick(photo: Photo, transitionImage: AppCompatImageView) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
             requireActivity(),
@@ -59,6 +72,14 @@ class PhotosFragment : BaseRefreshListFragment() {
         Intent(requireActivity(), PhotoDetailActivity::class.java).apply {
             putExtra(KEY_PHOTO, photo)
             startActivity(this, options.toBundle())
+        }
+    }
+
+    override fun getCurrentUserId(): String {
+        return if (viewModel.requestType == RequestType.UserPhotos || viewModel.requestType == RequestType.UserLikes) {
+            viewModel.requestType.query
+        } else {
+            super.getCurrentUserId()
         }
     }
 }
