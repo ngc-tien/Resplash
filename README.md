@@ -1,6 +1,6 @@
 # Resplash Clone
 
-This is the pet project 
+This is the pet project <br>
 Main features:
 - [X] View photos, collections and user profiles
 - [x] Download raw photos
