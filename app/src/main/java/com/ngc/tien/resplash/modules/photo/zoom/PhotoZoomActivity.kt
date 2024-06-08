@@ -12,21 +12,24 @@ import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.databinding.ActivityPhotoZoomBinding
 import com.ngc.tien.resplash.util.IntentConstants
+import com.ngc.tien.resplash.util.extentions.gone
+import com.ngc.tien.resplash.util.extentions.visible
 
 class PhotoZoomActivity : AppCompatActivity() {
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityPhotoZoomBinding.inflate(layoutInflater)
     }
+    private var showSystemBar = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        loadIntentData()
+        loadData()
         initViews()
         addListener()
     }
 
-    private fun loadIntentData() {
+    private fun loadData() {
         intent?.run {
             Glide.with(this@PhotoZoomActivity)
                 .load(getStringExtra(IntentConstants.KEY_PHOTO_URL))
@@ -42,31 +45,39 @@ class PhotoZoomActivity : AppCompatActivity() {
         windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
             val insets = ViewCompat.onApplyWindowInsets(view, windowInsets)
-            if (windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
-                || windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
-            ) {
-                binding.photoImage.setOnClickListener {
-                    windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                }
-            } else {
-                binding.photoImage.setOnClickListener {
-                    windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                }
-            }
+            showSystemBar = (windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
+                    || windowInsets.isVisible(WindowInsetsCompat.Type.statusBars()))
             insets
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        binding.photoImage.setOnClickListener {
+            if (showSystemBar) {
+                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                binding.toolBar.gone()
+            } else {
+                windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+                binding.toolBar.visible()
+            }
+        }
     }
 
     private fun addListener() {
         onBackPressedDispatcher.addCallback {
-            val layoutParams = binding.photoImage.layoutParams
-            layoutParams.height = resources.getDimensionPixelSize(R.dimen.photo_detail_min_height)
-            binding.photoImage.scale = 1f
-            binding.photoImage.scaleType = ImageView.ScaleType.CENTER_CROP
-            binding.photoImage.layoutParams = layoutParams
-            binding.photoImage.setImageDrawable(binding.photoImage.drawable)
-            binding.photoImage.post(::finishAfterTransition)
+            handleBackPressed()
         }
+        binding.toolBar.setNavigationOnClickListener {
+            handleBackPressed()
+        }
+    }
+
+    private fun handleBackPressed() {
+        val layoutParams = binding.photoImage.layoutParams
+        layoutParams.height = resources.getDimensionPixelSize(R.dimen.photo_detail_min_height)
+        binding.photoImage.scale = 1f
+        binding.photoImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        binding.photoImage.layoutParams = layoutParams
+        binding.photoImage.setImageDrawable(binding.photoImage.drawable)
+        binding.photoImage.post(::finishAfterTransition)
     }
 }
