@@ -73,7 +73,7 @@ class PhotoZoomActivity : AppCompatActivity() {
 
     private fun handleBackPressed() {
         val layoutParams = binding.photoImage.layoutParams
-        layoutParams.height = resources.getDimensionPixelSize(R.dimen.photo_detail_min_height)
+        layoutParams.height = resources.getDimensionPixelSize(R.dimen.photo_detail_image_height)
         binding.photoImage.scale = 1f
         binding.photoImage.scaleType = ImageView.ScaleType.CENTER_CROP
         binding.photoImage.layoutParams = layoutParams

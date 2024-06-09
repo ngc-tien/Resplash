@@ -165,7 +165,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun resetPhotoImageState() {
         val params = binding.photoImage.layoutParams
         params.width = ViewGroup.LayoutParams.MATCH_PARENT
-        params.height = resources.getDimensionPixelSize(R.dimen.photo_detail_min_height)
+        params.height = resources.getDimensionPixelSize(R.dimen.photo_detail_image_height)
         binding.photoImage.layoutParams = params
         if (photoBitmap != null) {
             binding.photoImage.setImageBitmap(photoBitmap!!)
