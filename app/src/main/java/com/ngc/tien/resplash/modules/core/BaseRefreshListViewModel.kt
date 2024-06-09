@@ -17,26 +17,26 @@ import javax.inject.Inject
 abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
     @Inject
     @ApplicationContext
-    internal lateinit var context: Context
+    private lateinit var context: Context
 
     @Inject
-    internal lateinit var photoRepository: PhotoRepository
+    protected lateinit var photoRepository: PhotoRepository
 
     @Inject
-    internal lateinit var collectionRepository: CollectionRepository
+    protected lateinit var collectionRepository: CollectionRepository
 
     @Inject
-    internal lateinit var searchRepository: SearchRepository
+    protected lateinit var searchRepository: SearchRepository
 
     @Inject
-    internal lateinit var userRepository: UserRepository
+    protected lateinit var userRepository: UserRepository
 
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
 
     val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
 
-    internal lateinit var requestType: RequestType
+    lateinit var requestType: RequestType
 
     private var firstPageLoadingComplete = false
 
@@ -100,5 +100,5 @@ abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
         }
     }
 
-    internal abstract suspend fun getData(page: Int): List<BaseRefreshListItem>
+    protected abstract suspend fun getData(page: Int): List<BaseRefreshListItem>
 }
