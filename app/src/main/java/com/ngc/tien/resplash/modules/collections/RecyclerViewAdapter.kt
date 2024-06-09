@@ -44,11 +44,6 @@ class RecyclerViewAdapter(
                 binding.userName.setOnClickListener {
                     onUserClick(user)
                 }
-                binding.coverImage.setAspectRatioAndColorForThumbnail(
-                    coverWidth,
-                    coverHeight,
-                    coverColor
-                )
                 binding.userImage.setBackgroundColor(Color.parseColor(coverColor))
                 requestManager
                     .load(user.profileImageMedium)
