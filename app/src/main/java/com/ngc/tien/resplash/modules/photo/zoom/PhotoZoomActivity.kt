@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.databinding.ActivityPhotoZoomBinding
 import com.ngc.tien.resplash.util.IntentConstants
+import com.ngc.tien.resplash.util.ViewUtils
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.visible
 
@@ -50,7 +51,6 @@ class PhotoZoomActivity : AppCompatActivity() {
             insets
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         binding.photoImage.setOnClickListener {
             if (showSystemBar) {
                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
@@ -73,6 +73,7 @@ class PhotoZoomActivity : AppCompatActivity() {
 
     private fun handleBackPressed() {
         val layoutParams = binding.photoImage.layoutParams
+        layoutParams.width = ViewUtils.getScreenWidth()
         layoutParams.height = resources.getDimensionPixelSize(R.dimen.photo_detail_image_height)
         binding.photoImage.scale = 1f
         binding.photoImage.scaleType = ImageView.ScaleType.CENTER_CROP

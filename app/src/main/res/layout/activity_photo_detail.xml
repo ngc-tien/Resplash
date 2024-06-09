@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
-        tools:context=".modules.photo.detail.PhotoDetailActivity">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/content"
@@ -74,29 +71,6 @@
                         app:layout_constraintStart_toEndOf="@id/locationIcon"
                         app:layout_constraintTop_toTopOf="@id/locationIcon" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/appBarLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/status_bar_height"
-                    android:background="@android:color/transparent"
-                    android:visibility="gone"
-                    app:elevation="0dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:minHeight="?attr/actionBarSize"
-                        android:theme="@style/Theme.ResplashClone.PhotoDetail.AppBarLayout.ActionButton"
-                        app:menu="@menu/photo_detail_appbar_menu"
-                        app:navigationIcon="@drawable/navigation_back_icon" />
-
-                </com.google.android.material.appbar.AppBarLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/photoDetail"
@@ -431,6 +405,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dimen_8dp"
                         android:layout_marginTop="@dimen/dimen_16dp"
+                        android:paddingBottom="@dimen/navigation_bar_height"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/bottomDivider">
@@ -451,6 +426,29 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/immersive_sys_ui"
+            android:paddingTop="@dimen/status_bar_height"
+            android:visibility="gone"
+            app:elevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/Theme.ResplashClone.PhotoDetail.AppBarLayout.ActionButton"
+                app:menu="@menu/photo_detail_appbar_menu"
+                app:navigationIcon="@drawable/navigation_back_icon" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/setWallpaperButton"

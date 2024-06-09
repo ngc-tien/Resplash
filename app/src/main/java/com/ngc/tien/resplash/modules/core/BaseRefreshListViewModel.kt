@@ -17,7 +17,7 @@ import javax.inject.Inject
 abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
     @Inject
     @ApplicationContext
-    private lateinit var context: Context
+    protected lateinit var context: Context
 
     @Inject
     protected lateinit var photoRepository: PhotoRepository

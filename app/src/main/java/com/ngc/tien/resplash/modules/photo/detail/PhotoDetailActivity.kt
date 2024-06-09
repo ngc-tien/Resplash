@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.forEach
 import com.airbnb.lottie.LottieDrawable
 import com.bumptech.glide.Glide
@@ -146,6 +148,16 @@ class PhotoDetailActivity : AppCompatActivity() {
             LauncherHelper.launchUserDetailPage(this, uiState.item.user)
         }
         addSharedWindowTransitionAnimation()
+        binding.content.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                val bgColorResId =
+                    if (scrollY > resources.getDimensionPixelSize(R.dimen.photo_detail_image_height))
+                        R.color.color_surface
+                    else
+                        R.color.immersive_sys_ui
+                binding.appBarLayout.setBackgroundColor(resources.getColor(bgColorResId, null))
+            }
+        }
     }
 
     private fun setPhotoImageFitToScreen() {
@@ -159,7 +171,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         } else {
             binding.photoImage.setImageDrawable(binding.photoImage.drawable)
         }
-        binding.photoImage.scaleType = ImageView.ScaleType.CENTER
+        binding.photoImage.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 
     private fun resetPhotoImageState() {
@@ -219,6 +231,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             }
             true
         }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     private fun addObserves() {

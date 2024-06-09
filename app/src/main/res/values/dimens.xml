@@ -5,7 +5,7 @@
     <dimen name="dimen_12dp">12dp</dimen>
     <dimen name="dimen_16dp">16dp</dimen>
 
-    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="status_bar_height">18dp</dimen>
     <dimen name="navigation_bar_height">48dp</dimen>
 
     <dimen name="logo_size">48dp</dimen>
@@ -17,5 +17,5 @@
     <dimen name="user_detail_profile_image_size">84dp</dimen>
     <dimen name="search_user_profile_image_size">48dp</dimen>
     <dimen name="search_user_photos_height">120dp</dimen>
-    <dimen name="number_of_column">1</dimen>
+    <dimen name="zoom_detail_appbar_padding_horizontal">0dp</dimen>
 </resources>
