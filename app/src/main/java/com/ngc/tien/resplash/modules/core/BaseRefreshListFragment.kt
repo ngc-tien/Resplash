@@ -17,12 +17,13 @@ import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.visible
 import com.ngc.tien.resplash.util.helper.LauncherHelper
 
-abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLayoutBinding>(
-    RefreshListItemFragmentLayoutBinding::inflate
-) {
+abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
+    BaseFragment<RefreshListItemFragmentLayoutBinding>(
+        RefreshListItemFragmentLayoutBinding::inflate
+    ) {
     private var isRefreshing = false
     abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
-    abstract val viewModel: IBaseRefreshListViewModel
+    abstract val viewModel: BaseViewModel<T>
     internal var user: User? = null
 
     @CallSuper

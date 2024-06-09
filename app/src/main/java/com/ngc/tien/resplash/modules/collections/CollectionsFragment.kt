@@ -13,7 +13,7 @@ import com.ngc.tien.resplash.util.IntentConstants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CollectionsFragment : BaseRefreshListFragment() {
+class CollectionsFragment : BaseRefreshListFragment<Collection>() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecyclerViewAdapter(
             Glide.with(this@CollectionsFragment),

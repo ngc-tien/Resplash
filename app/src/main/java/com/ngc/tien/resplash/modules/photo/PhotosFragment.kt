@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class PhotosFragment : BaseRefreshListFragment() {
+class PhotosFragment : BaseRefreshListFragment<Photo>() {
     override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecyclerViewAdapter(
             Glide.with(this@PhotosFragment),
