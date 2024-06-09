@@ -8,4 +8,6 @@ interface IBaseRefreshListViewModel {
     fun loadFirstPage()
 
     fun loadNextPage()
+
+    fun refresh()
 }

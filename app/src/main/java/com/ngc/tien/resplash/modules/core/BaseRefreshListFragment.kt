@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.user.User
@@ -22,7 +23,7 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
     private var isRefreshing = false
     abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
     abstract val viewModel: IBaseRefreshListViewModel
-    internal var user:User? = null
+    internal var user: User? = null
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +35,10 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
 
     private fun initViews() {
         binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = StaggeredGridLayoutManager(
+                resources.getInteger(R.integer.number_of_column),
+                LinearLayoutManager.VERTICAL
+            )
             adapter = recyclerViewAdapter
         }
         binding.lottieLoading.setAnimation(R.raw.lottie_loading)
@@ -54,18 +58,19 @@ abstract class BaseRefreshListFragment : BaseFragment<RefreshListItemFragmentLay
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (viewModel.uiStateLiveData.value !is BaseRefreshListUiState.FirstPageLoading && !isRefreshing) {
                 isRefreshing = true
-                viewModel.loadFirstPage()
+                viewModel.refresh()
             }
         }
     }
 
     private fun handleLoadMore() {
-        val linearLayoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
-
+        val layoutManager = binding.recyclerView.layoutManager as StaggeredGridLayoutManager
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val lastVisibleItems = layoutManager.findLastVisibleItemPositions(null)
+                val lastVisibleItem = lastVisibleItems.maxOrNull() ?: 0
                 if (dy > 0
-                    && linearLayoutManager.findLastVisibleItemPosition() + Constants.VISIBLE_ITEM_THRESHOLD >= linearLayoutManager.itemCount
+                    && lastVisibleItem + Constants.VISIBLE_ITEM_THRESHOLD >= layoutManager.itemCount
                 ) {
                     loadNextPage()
                 }

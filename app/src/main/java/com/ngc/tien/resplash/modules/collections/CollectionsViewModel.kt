@@ -30,8 +30,12 @@ class CollectionsViewModel @Inject constructor(
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
     override val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
     lateinit var requestType: RequestType
+    private var firstPageLoadingComplete = false
 
     override fun loadFirstPage() {
+        if (firstPageLoadingComplete) {
+            return
+        }
         viewModelScope.launch {
             uiState.value = BaseRefreshListUiState.FirstPageLoading
             try {
@@ -44,7 +48,13 @@ class CollectionsViewModel @Inject constructor(
             } catch (ex: Exception) {
                 uiState.value = BaseRefreshListUiState.FirstPageError(getErrorMessage(context, ex))
             }
+            firstPageLoadingComplete = true
         }
+    }
+
+    override fun refresh() {
+        firstPageLoadingComplete = false
+        loadFirstPage()
     }
 
     override fun loadNextPage() {

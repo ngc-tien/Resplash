@@ -8,4 +8,4 @@ Main features:
 - [X] Support Dark/Night theme
 - [ ] Automatic update wallpaper with new random wallpaper
 - [ ] Log in to like photos and update your profile
-- [ ] Responsive layout in different devices
+- [X] Support responsive layout

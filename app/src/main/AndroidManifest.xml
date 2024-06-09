@@ -27,21 +27,17 @@
         <activity
             android:name=".modules.photo.zoom.PhotoZoomActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.ResplashClone.PhotoZoom" />
         <activity
             android:name=".modules.photo.detail.PhotoDetailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.ResplashClone.PhotoDetail" />
         <activity
             android:name=".modules.main.MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait" />
+            android:exported="true" />
         <activity
             android:name=".modules.splashscreen.SplashScreenActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
