@@ -4,26 +4,26 @@ import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityWallpaperSettingsBinding
-import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailUIState
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.visible
-import com.squareup.picasso.Picasso
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class WallpaperSettingsActivity : AppCompatActivity() {
     private lateinit var photo: Photo
@@ -43,11 +43,13 @@ class WallpaperSettingsActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding.setWallpaperButton.setOnClickListener {
             binding.popupMenuWrapper.visible()
+            slideUp(binding.popupMenu)
             it.gone()
         }
         binding.popupMenuWrapper.setOnClickListener {
             binding.popupMenuWrapper.gone()
             binding.setWallpaperButton.visible()
+            slideDown(binding.popupMenu)
         }
         binding.homeScreenButton.setOnClickListener {
             setWallpaper(WallpaperManager.FLAG_SYSTEM)
@@ -109,5 +111,30 @@ class WallpaperSettingsActivity : AppCompatActivity() {
             Log.e("WallpaperSettings", "$message")
             Toast.makeText(this@WallpaperSettingsActivity, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun slideUp(view: View) {
+        view.visibility = View.VISIBLE
+        val animate = TranslateAnimation(
+            0f,  // fromXDelta
+            0f,  // toXDelta
+            view.height.toFloat(),  // fromYDelta
+            0f
+        ) // toYDelta
+        animate.duration = 250
+        animate.fillAfter = true
+        view.startAnimation(animate)
+    }
+
+    fun slideDown(view: View) {
+        val animate = TranslateAnimation(
+            0f,  // fromXDelta
+            0f,  // toXDelta
+            0f,  // fromYDelta
+            view.height.toFloat()
+        ) // toYDelta
+        animate.duration = 250
+        animate.fillAfter = true
+        view.startAnimation(animate)
     }
 }
