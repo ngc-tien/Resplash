@@ -15,7 +15,14 @@
     <dimen name="collection_cover_image_height">250dp</dimen>
     <dimen name="photo_detail_image_height">250dp</dimen>
     <dimen name="user_detail_profile_image_size">84dp</dimen>
+    <dimen name="photo_detail_tags_padding_bottom">96dp</dimen>
+    <dimen name="photo_detail_set_wallpaper_button_margin_bottom">48dp</dimen>
     <dimen name="search_user_profile_image_size">48dp</dimen>
     <dimen name="search_user_photos_height">120dp</dimen>
     <dimen name="zoom_detail_appbar_padding_horizontal">0dp</dimen>
+
+    <dimen name="wallpaper_settings_margin_horizontal">36dp</dimen>
+    <dimen name="wallpaper_settings_margin_top">60dp</dimen>
+    <dimen name="wallpaper_settings_margin_bottom">60dp</dimen>
+    <dimen name="wallpaper_settings_conner_radius">24dp</dimen>
 </resources>

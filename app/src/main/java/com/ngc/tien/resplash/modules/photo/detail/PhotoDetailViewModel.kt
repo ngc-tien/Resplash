@@ -42,26 +42,4 @@ class PhotoDetailViewModel @Inject constructor(
             }
         }
     }
-
-    fun setWallpaper() {
-        viewModelScope.launch {
-           withContext(Dispatchers.IO) {
-               try {
-                   _setWallpaperMessage.postValue("Set wallpaper start.")
-                   val uiState = uiState.value as PhotoDetailUIState.Content
-                   val bitmap = Picasso.get()
-                       .load(uiState.item.downloadPhotoUrl)
-                       .get()
-                   val wallpaperManager = WallpaperManager.getInstance(context)
-                   wallpaperManager.setBitmap(bitmap)
-                   _setWallpaperMessage.postValue("Set wallpaper completed.")
-               } catch (ex: Exception) {
-                   ex.printStackTrace()
-                   Log.e(this::class.java.name, "set wallpaper failed ${ex.message}")
-                   _setWallpaperMessage.postValue("set wallpaper failed.")
-               }
-               _setWallpaperMessage.postValue("")
-           }
-        }
-    }
 }

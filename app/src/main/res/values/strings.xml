@@ -10,6 +10,10 @@
     <string name="nothing_to_see_here">Nothing to see here....</string>
     <string name="set_as_wallpaper">SET AS WALLPAPER</string>
     <string name="unsplash_unauthed_submit_url" translatable="false">https://unsplash.com/?modal=%5B%22Login%22%2C%5B%22SubmitAPhoto%22%2C%7B%22mode%22%3A%5B%22Publish%22%2Cnull%5D%7D%5D%5D</string>
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="home_screen">Home screen</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="home_screen_and_lock_screen">Home screen and lock screen</string>
 </resources>

@@ -103,4 +103,7 @@ dependencies {
     implementation libs.picasso
 
     implementation libs.androidx.browser
+
+    implementation libs.glide.transformations
+    implementation libs.gpuimage
 }

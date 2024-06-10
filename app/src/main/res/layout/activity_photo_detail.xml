@@ -405,7 +405,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dimen_8dp"
                         android:layout_marginTop="@dimen/dimen_16dp"
-                        android:paddingBottom="@dimen/navigation_bar_height"
+                        android:paddingBottom="@dimen/photo_detail_tags_padding_bottom"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/bottomDivider">
@@ -455,7 +455,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_16dp"
-            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/photo_detail_set_wallpaper_button_margin_bottom"
             android:text="@string/set_as_wallpaper"
             app:cornerRadius="@dimen/dimen_16dp"
             app:icon="@drawable/wallpaper_icon"
@@ -479,7 +479,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/photo_detail_image_height"
-            android:layout_marginBottom="@dimen/navigation_bar_height"
+            android:layout_marginBottom="@dimen/photo_detail_set_wallpaper_button_margin_bottom"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">

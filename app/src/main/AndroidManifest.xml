@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ResplashClone">
         <activity
+            android:name=".modules.photo.wallpaper_settings.WallpaperSettingsActivity"
+            android:theme="@style/Theme.ResplashClone.WallpaperSettings"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity
             android:name=".modules.user.detail.UserDetailActivity"
             android:exported="false" />
         <activity
