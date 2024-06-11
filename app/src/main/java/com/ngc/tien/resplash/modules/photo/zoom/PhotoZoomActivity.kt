@@ -54,10 +54,10 @@ class PhotoZoomActivity : AppCompatActivity() {
         binding.photoImage.setOnClickListener {
             if (showSystemBar) {
                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                binding.toolBar.gone()
+                binding.toolbarWrapper.gone()
             } else {
                 windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                binding.toolBar.visible()
+                binding.toolbarWrapper.visible()
             }
         }
     }
