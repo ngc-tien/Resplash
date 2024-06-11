@@ -2,23 +2,27 @@ package com.ngc.tien.resplash.modules.photo.wallpaper_settings
 
 import android.app.WallpaperManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
+import com.bumptech.glide.request.target.Target
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityWallpaperSettingsBinding
 import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone
-import com.ngc.tien.resplash.util.extentions.visible
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +31,9 @@ import kotlinx.coroutines.withContext
 
 class WallpaperSettingsActivity : AppCompatActivity() {
     private lateinit var photo: Photo
+    private val uiHandler = Handler(Looper.getMainLooper())
+    private lateinit var modalBottomSheet: SetWallpaperBottomSheet
+    private var thumbnailLoaded = 0
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityWallpaperSettingsBinding.inflate(layoutInflater)
@@ -42,24 +49,19 @@ class WallpaperSettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding.setWallpaperButton.setOnClickListener {
-            binding.popupMenuWrapper.visible()
-            slideUp(binding.popupMenu)
-            it.gone()
+            modalBottomSheet.setCallBack(object : SetWallpaperBottomSheet.CallBack {
+                override fun setWallpaper(flag: Int) {
+                    this@WallpaperSettingsActivity.setWallpaper(flag)
+                }
+            })
+            modalBottomSheet.show(supportFragmentManager, SetWallpaperBottomSheet.TAG)
         }
-        binding.popupMenuWrapper.setOnClickListener {
-            binding.popupMenuWrapper.gone()
-            binding.setWallpaperButton.visible()
-            slideDown(binding.popupMenu)
-        }
-        binding.homeScreenButton.setOnClickListener {
-            setWallpaper(WallpaperManager.FLAG_SYSTEM)
-        }
-        binding.lockScreenButton.setOnClickListener {
-            setWallpaper(WallpaperManager.FLAG_LOCK)
-        }
-        binding.homeAndLockScreenButton.setOnClickListener {
-            setWallpaper(WallpaperManager.FLAG_LOCK or WallpaperManager.FLAG_SYSTEM)
-        }
+        modalBottomSheet =
+            if (supportFragmentManager.findFragmentByTag(SetWallpaperBottomSheet.TAG) != null) {
+                supportFragmentManager.findFragmentByTag(SetWallpaperBottomSheet.TAG)!! as SetWallpaperBottomSheet
+            } else {
+                SetWallpaperBottomSheet()
+            }
     }
 
     private fun loadData() {
@@ -68,19 +70,55 @@ class WallpaperSettingsActivity : AppCompatActivity() {
             finish()
         } else {
             this.photo = photo!!
+            window.decorView.setBackgroundColor(Color.parseColor(photo.color))
+            binding.blurBackground.setBackgroundColor(Color.parseColor(photo.color))
             Glide.with(this)
-                .load(photo.thumbnailRegularUrl)
+                .load(photo.thumbnailUrl)
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(100, 3)))
                 .into(binding.blurBackground)
+            val requestThumbnail = Glide.with(this)
+                .asBitmap()
+                .load(photo.thumbnailUrl)
+                .addListener(object :
+                    RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        binding.photoImage.setBitmap(resource)
+                        return true
+                    }
+
+                })
             Glide.with(this)
                 .asBitmap()
                 .load(photo.thumbnailRegularUrl)
-                .thumbnail(Glide.with(this).asBitmap().load(photo.thumbnailUrl))
+                .thumbnail(requestThumbnail)
                 .into(object : BitmapImageViewTarget(binding.photoImage) {
                     override fun setResource(resource: Bitmap?) {
+                        if (resource == null) {
+                            return
+                        }
+                        binding.photoImage.setBitmap(resource)
+                        binding.photoImageWrapper.cardElevation =
+                            resources.getDimensionPixelSize(R.dimen.dimen_8dp).toFloat()
+                        binding.loading.gone()
                         binding.photoImage.setBitmap(resource)
                     }
                 })
+
         }
     }
 
@@ -111,30 +149,5 @@ class WallpaperSettingsActivity : AppCompatActivity() {
             Log.e("WallpaperSettings", "$message")
             Toast.makeText(this@WallpaperSettingsActivity, message, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    fun slideUp(view: View) {
-        view.visibility = View.VISIBLE
-        val animate = TranslateAnimation(
-            0f,  // fromXDelta
-            0f,  // toXDelta
-            view.height.toFloat(),  // fromYDelta
-            0f
-        ) // toYDelta
-        animate.duration = 250
-        animate.fillAfter = true
-        view.startAnimation(animate)
-    }
-
-    fun slideDown(view: View) {
-        val animate = TranslateAnimation(
-            0f,  // fromXDelta
-            0f,  // toXDelta
-            0f,  // fromYDelta
-            view.height.toFloat()
-        ) // toYDelta
-        animate.duration = 250
-        animate.fillAfter = true
-        view.startAnimation(animate)
     }
 }

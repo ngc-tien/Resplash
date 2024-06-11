@@ -10,4 +10,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/dimen_8dp</item>
     </style>
+
+    <style name="ThemeOverlay.Theme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

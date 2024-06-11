@@ -21,17 +21,22 @@ class WallpaperSettingsImageView @JvmOverloads constructor(
     private val touchPoint = PointF()
     private var isLoaded = false
     private var maxTranX = 0f
+
     override fun onDraw(canvas: Canvas) {
-        bitmap?.let { bitmap ->
+        if (bitmap != null) {
             if (!isLoaded) {
-                val scale = height.toFloat() / bitmap.height
-                zoomedWidth = (bitmap.width * scale).toInt()
-                maxTranX = (width - bitmap.width * scale) / 2
+                val scale = height.toFloat() / bitmap!!.height
+                zoomedWidth = (bitmap!!.width * scale).toInt()
+                maxTranX = (width - bitmap!!.width * scale) / 2
                 matrix.setScale(scale, scale)
                 matrix.postTranslate(maxTranX, 0f)
                 isLoaded = true
             }
-            canvas.drawBitmap(bitmap, matrix, null)
+            canvas.save()
+            canvas.drawBitmap(bitmap!!, matrix, null)
+            canvas.restore()
+        } else {
+            super.onDraw(canvas)
         }
     }
 
@@ -59,13 +64,17 @@ class WallpaperSettingsImageView @JvmOverloads constructor(
     }
 
     fun setBitmap(bitmap: Bitmap?) {
+        if (bitmap == null || bitmap.isRecycled) {
+            return
+        }
+        isLoaded = false
         this.bitmap = bitmap
         invalidate()
     }
 
     fun getCurrentBitmap(): Bitmap? {
         bitmap?.let { originalBitmap ->
-            val transformedBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, Bitmap.Config.ARGB_8888)
+            val transformedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(transformedBitmap)
             canvas.drawBitmap(originalBitmap, matrix, null)
             return transformedBitmap
