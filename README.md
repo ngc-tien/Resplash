@@ -3,7 +3,7 @@
 This is the pet project <br>
 Main features:
 - [X] View photos, collections and user profiles
-- [x] Download raw photos
+- [x] Download wallpapers
 - [x] Set as wallpaper straight from the app
 - [X] Support Dark/Night theme
 - [ ] Automatic update wallpaper with new random wallpaper
