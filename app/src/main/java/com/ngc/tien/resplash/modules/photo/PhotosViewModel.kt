@@ -8,6 +8,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotosViewModel @Inject constructor() : BaseViewModel<Photo>() {
+    var selectedItemIndex = -1
+
     override suspend fun getData(page: Int): List<Photo> {
         return when (requestType) {
             RequestType.Collection -> collectionRepository.getCollectionPhotos(

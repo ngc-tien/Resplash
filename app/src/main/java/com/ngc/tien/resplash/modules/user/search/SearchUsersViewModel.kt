@@ -9,6 +9,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchUsersViewModel @Inject constructor() : BaseViewModel<User>() {
     var searchQuery = ""
+    var selectedUseIndex = -1
+    var selectedPhotoIndex = -1
 
     override suspend fun getData(page: Int): List<BaseRefreshListItem> {
         return searchRepository.searchUsers(searchQuery, page = 1)

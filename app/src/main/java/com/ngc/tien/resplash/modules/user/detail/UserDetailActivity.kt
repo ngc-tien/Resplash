@@ -1,16 +1,15 @@
 package com.ngc.tien.resplash.modules.user.detail
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.tabs.TabLayout
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.ActivityUserDetailBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
-import com.ngc.tien.resplash.modules.core.BaseViewPagerAdapter
+import com.ngc.tien.resplash.modules.core.BaseViewPagerActivity
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.IntentConstants
@@ -18,28 +17,22 @@ import com.ngc.tien.resplash.util.extentions.gone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserDetailActivity : AppCompatActivity() {
+class UserDetailActivity : BaseViewPagerActivity() {
     private lateinit var user: User
-    private lateinit var viewPagerAdapter: BaseViewPagerAdapter
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityUserDetailBinding.inflate(layoutInflater)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initViews() {
         setContentView(binding.root)
-        initViews()
-        loadData()
-    }
-
-    private fun initViews() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
-    private fun loadData() {
+    override fun loadData(savedInstanceState: Bundle?) {
+        super.loadData(savedInstanceState)
         val user = intent.getSerializableExtra(IntentConstants.KEY_USER, User::class.java)
         if (user == null) {
             finish()
@@ -74,9 +67,13 @@ class UserDetailActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("WrongConstant")
-    private fun setupViewPager() {
-        viewPagerAdapter = BaseViewPagerAdapter(this)
+    override fun getOffsetScreenPageLimit(): Int = Constants.SEARCH_SCREEN_PAGE_LIMIT
+
+    override fun getViewPager(): ViewPager2 = binding.viewPager
+
+    override fun getTabLayout(): TabLayout = binding.tabLayout
+
+    override fun initFragments() {
         addUserPhotoFragment()
         if (user.totalLikes != 0) {
             addLikePhotosFragment()
@@ -84,11 +81,6 @@ class UserDetailActivity : AppCompatActivity() {
         if (user.totalCollections != 0) {
             addCollectionFragment()
         }
-        binding.viewPager.adapter = viewPagerAdapter
-        binding.viewPager.offscreenPageLimit = Constants.SEARCH_SCREEN_PAGE_LIMIT
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = viewPagerAdapter.getPageTitle(position)
-        }.attach()
     }
 
     private fun addUserPhotoFragment() {

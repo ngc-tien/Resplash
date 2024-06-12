@@ -17,7 +17,7 @@ import com.ngc.tien.resplash.util.extentions.visible
 class RecyclerViewAdapter(
     private val requestManager: RequestManager,
     private val onUserClick: (user: User) -> Unit,
-    private val onPhotoClick: (photo: Photo, transitionImage: AppCompatImageView) -> Unit
+    private val onPhotoClick: (user: User, photo: Photo, transitionImage: AppCompatImageView) -> Unit
 ) : BaseRefreshListViewAdapter() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,7 +35,7 @@ class RecyclerViewAdapter(
         private val requestManager: RequestManager,
         private val binding: SearchUserItemLayoutBinding,
         private val onUserClick: (user: User) -> Unit,
-        private val onPhotoClick: (photo: Photo, transitionImage: AppCompatImageView) -> Unit
+        private val onPhotoClick: (user: User, photo: Photo, transitionImage: AppCompatImageView) -> Unit
     ) :
         BaseViewHolder(binding) {
         override fun bind(item: BaseRefreshListItem) {
@@ -53,21 +53,21 @@ class RecyclerViewAdapter(
                     binding.photos.gone()
                 } else {
                     binding.photos.visible()
-                    bindingPhoto(binding.photo1, photos[0])
-                    bindingPhoto(binding.photo2, photos[1])
-                    bindingPhoto(binding.photo3, photos[2])
+                    bindingPhoto(item, binding.photo1, photos[0])
+                    bindingPhoto(item, binding.photo2, photos[1])
+                    bindingPhoto(item, binding.photo3, photos[2])
                 }
             }
         }
 
-        private fun bindingPhoto(imageView: AppCompatImageView, photo: Photo) {
+        private fun bindingPhoto(user: User, imageView: AppCompatImageView, photo: Photo) {
             requestManager
                 .load(photo.thumbnailSmallUrl)
                 .thumbnail(requestManager.load(photo.thumbnailUrl))
                 .into(imageView)
             imageView.setBackgroundColor(Color.parseColor("#E0E0E0"))
             imageView.setOnClickListener{
-                onPhotoClick(photo, imageView)
+                onPhotoClick(user, photo, imageView)
             }
         }
     }

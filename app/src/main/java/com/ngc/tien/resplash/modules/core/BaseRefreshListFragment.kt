@@ -50,7 +50,7 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
         viewModel.loadFirstPage()
     }
 
-    private fun addObserves() {
+    open fun addObserves() {
         handleLoadMore()
         viewModel.uiStateLiveData.observe(
             viewLifecycleOwner,
@@ -126,5 +126,9 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
             return
         }
         LauncherHelper.launchUserDetailPage(requireActivity(), user)
+    }
+
+    open fun onMapSharedElements(names: List<String?>, sharedElements: MutableMap<String?, View?>) {
+
     }
 }
