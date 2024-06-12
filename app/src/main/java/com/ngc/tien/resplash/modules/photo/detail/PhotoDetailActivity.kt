@@ -109,7 +109,6 @@ class PhotoDetailActivity : AppCompatActivity() {
             binding.photoImage.foreground = null
             onBackPressed = true
             window.sharedElementEnterTransition.removeListener(sharedEnterTransitionListener)
-            finishAfterTransition()
             setPhotoImageFitToScreen()
             binding.photoImage.post(::finishAfterTransition)
         }
@@ -164,6 +163,12 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun setPhotoImageFitToScreen() {
         val params = binding.photoImage.layoutParams
         var photoWrapperWidth = ViewUtils.getScreenWidth()
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            photoWrapperWidth =
+                photoWrapperWidth / resources.getInteger(R.integer.number_of_column) - 4 * resources.getDimensionPixelSize(
+                    R.dimen.dimen_16dp
+                )
+        }
         params.width = photoWrapperWidth
         params.height = ((photoWrapperWidth.toFloat() / photo.width) * photo.height).toInt()
         binding.photoImage.layoutParams = params
