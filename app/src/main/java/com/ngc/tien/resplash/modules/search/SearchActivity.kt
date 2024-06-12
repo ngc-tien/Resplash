@@ -23,18 +23,11 @@ class SearchActivity : BaseViewPagerActivity() {
 
     private val viewModel by viewModels<SearchViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.searchString = intent.getStringExtra(IntentConstants.KEY_SEARCH_QUERY) ?: ""
-    }
-
     override fun initViews() {
         setContentView(binding.root)
-        setupViewPager()
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
-        binding.searchText.setText(viewModel.searchString)
         binding.searchText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.searchString = binding.searchText.text.toString()
@@ -42,6 +35,13 @@ class SearchActivity : BaseViewPagerActivity() {
             }
             false
         }
+    }
+
+    override fun loadData(savedInstanceState: Bundle?) {
+        super.loadData(savedInstanceState)
+        viewModel.searchString = intent.getStringExtra(IntentConstants.KEY_SEARCH_QUERY) ?: ""
+        setupViewPager()
+        binding.searchText.setText(viewModel.searchString)
     }
 
     override fun getOffsetScreenPageLimit(): Int = Constants.SEARCH_SCREEN_PAGE_LIMIT
