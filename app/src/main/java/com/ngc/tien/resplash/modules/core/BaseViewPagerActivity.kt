@@ -43,7 +43,7 @@ abstract class BaseViewPagerActivity: AppCompatActivity() {
 
     abstract fun getViewPager(): ViewPager2
 
-    abstract fun getTabLayout(): TabLayout
+    abstract fun getTabLayout(): TabLayout?
 
     abstract fun initFragments()
 
@@ -55,9 +55,11 @@ abstract class BaseViewPagerActivity: AppCompatActivity() {
         initFragments()
         viewPager.adapter = viewPagerAdapter
         viewPager.offscreenPageLimit = Constants.SEARCH_SCREEN_PAGE_LIMIT
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = viewPagerAdapter.getPageTitle(position)
-        }.attach()
+        tabLayout?.run {
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = viewPagerAdapter.getPageTitle(position)
+            }.attach()
+        }
         viewPager.setCurrentItem(selectedPage, false)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

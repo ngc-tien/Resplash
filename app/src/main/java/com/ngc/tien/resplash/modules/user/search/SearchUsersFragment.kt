@@ -54,6 +54,7 @@ class SearchUsersFragment : BaseRefreshListFragment<User>() {
         names: List<String?>,
         sharedElements: MutableMap<String?, View?>
     ) {
+        binding.recyclerView.scrollToPosition(viewModel.selectedUseIndex)
         val selectedViewHolder: RecyclerView.ViewHolder = binding.recyclerView.findViewHolderForAdapterPosition(viewModel.selectedUseIndex)
             ?: return
         selectedViewHolder?.itemView?.run {

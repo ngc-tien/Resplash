@@ -80,6 +80,7 @@ open class PhotosFragment : BaseRefreshListFragment<Photo>() {
         if (viewModel.selectedItemIndex == -1) {
             return
         }
+        binding.recyclerView.scrollToPosition(viewModel.selectedItemIndex)
         val selectedViewHolder: RecyclerView.ViewHolder = binding.recyclerView.findViewHolderForAdapterPosition(viewModel.selectedItemIndex)
             ?: return
         selectedViewHolder?.itemView?.run {

@@ -163,6 +163,8 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun setPhotoImageFitToScreen() {
         val params = binding.photoImage.layoutParams
         var photoWrapperWidth = ViewUtils.getScreenWidth()
+        var imageWidth = photoBitmap?.width ?: binding.photoImage.drawable.intrinsicWidth
+        var imageHeight = photoBitmap?.height ?: binding.photoImage.drawable.intrinsicHeight
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             photoWrapperWidth =
                 photoWrapperWidth / resources.getInteger(R.integer.number_of_column) - 4 * resources.getDimensionPixelSize(
@@ -170,7 +172,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 )
         }
         params.width = photoWrapperWidth
-        params.height = ((photoWrapperWidth.toFloat() / photo.width) * photo.height).toInt()
+        params.height = ((photoWrapperWidth.toFloat() / imageWidth) * imageHeight).toInt()
         binding.photoImage.layoutParams = params
         if (photoBitmap != null) {
             binding.photoImage.setImageBitmap(photoBitmap!!)
