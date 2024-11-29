@@ -22,7 +22,12 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '17' # Change to the version you need for your project
+          java-version: '17'
+          
+      - name: Access UNSPLASH_ACCESS_KEY
+        env:
+          UNSPLASH_ACCESS_KEY: $
+        run: echo UNSPLASH_ACCESS_KEY=\"$UNSPLASH_ACCESS_KEY\" > ./local.properties
 
       - name: Cache Gradle files
         uses: actions/cache@v2
