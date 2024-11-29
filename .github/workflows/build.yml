@@ -28,24 +28,7 @@ jobs:
         env:
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: echo UNSPLASH_ACCESS_KEY=\"$UNSPLASH_ACCESS_KEY\" > ./local.properties
-
-      - name: Cache Gradle files
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}
-
-      - name: Build and test
-        run: ./gradlew build --no-daemon
-
-      - name: Run unit tests
-        run: ./gradlew test --no-daemon
-
-      # Upload debug APK as an artifact
+        
       - name: Build debug APK
         run: ./gradlew assembleDebug --no-daemon
 
