@@ -29,8 +29,7 @@ class SearchUsersFragment : BaseRefreshListFragment<User>() {
                 }
             }
         }
-        viewModel.searchQuery = searchQuery
-        super.initData()
+        viewModel.loadFirstPage(searchQuery)
     }
 
     override fun getAdapter(): BaseRefreshListViewAdapter = RecyclerViewAdapter(

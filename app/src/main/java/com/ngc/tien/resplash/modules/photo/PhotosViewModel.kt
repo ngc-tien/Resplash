@@ -20,6 +20,11 @@ class PhotosViewModel @Inject constructor(
 ) : BaseViewModel<Photo>() {
     var selectedItemIndex = -1
 
+    fun loadFirstPage(event: NetworkRequestEvent) {
+        networkRequestEvent = event
+        loadFirstPage()
+    }
+
     override suspend fun getData(page: Int): List<Photo> {
         val networkRequestEvent = networkRequestEvent as NetworkRequestEvent.Photo
         return when (networkRequestEvent.type) {

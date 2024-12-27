@@ -5,6 +5,7 @@ import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepos
 import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
 import com.ngc.tien.resplash.data.remote.repositories.user.UserRepository
 import com.ngc.tien.resplash.modules.core.BaseViewModel
+import com.ngc.tien.resplash.modules.core.NetworkRequestEvent
 import com.ngc.tien.resplash.modules.core.NetworkRequestEvent.Collections
 import com.ngc.tien.resplash.modules.core.NetworkRequestEvent.Collections.Type.*;
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,12 @@ class CollectionsViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
     private val userRepository: UserRepository
 ) : BaseViewModel<Collection>() {
+
+    fun loadFirstPage(event: NetworkRequestEvent) {
+        networkRequestEvent = event
+        loadFirstPage()
+    }
+
     override suspend fun getData(page: Int): List<Collection> {
         var requestType = networkRequestEvent as Collections
         return when (requestType.type) {

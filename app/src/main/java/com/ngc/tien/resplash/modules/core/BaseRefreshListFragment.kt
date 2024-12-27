@@ -48,9 +48,7 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
         binding.lottieLoading.repeatCount = LottieDrawable.INFINITE
     }
 
-    open fun initData() {
-        viewModel.loadFirstPage()
-    }
+    abstract fun initData()
 
     open fun addObserves() {
         handleLoadMore()

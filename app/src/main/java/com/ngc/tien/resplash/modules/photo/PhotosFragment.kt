@@ -44,8 +44,7 @@ open class PhotosFragment : BaseRefreshListFragment<Photo>() {
                 }
             }
         }
-        viewModel.networkRequestEvent = networkRequestEvent
-        super.initData()
+        viewModel.loadFirstPage(networkRequestEvent)
     }
 
     override fun getAdapter(): BaseRefreshListViewAdapter = RecyclerViewAdapter(
