@@ -1,6 +1,7 @@
 package com.ngc.tien.resplash.modules.photo.detail
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -20,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.forEach
@@ -32,9 +34,9 @@ import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityPhotoDetailBinding
 import com.ngc.tien.resplash.modules.photo.wallpaper_settings.WallpaperSettingsActivity
 import com.ngc.tien.resplash.modules.photo.zoom.PhotoZoomActivity
+import com.ngc.tien.resplash.modules.search.SearchActivity
+import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO
-import com.ngc.tien.resplash.util.IntentConstants.KEY_PHOTO_URL
 import com.ngc.tien.resplash.util.ViewUtils
 import com.ngc.tien.resplash.util.extentions.formatNumber
 import com.ngc.tien.resplash.util.extentions.gone
@@ -44,7 +46,6 @@ import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.shareUrl
 import com.ngc.tien.resplash.util.extentions.transparent
 import com.ngc.tien.resplash.util.extentions.visible
-import com.ngc.tien.resplash.util.helper.LauncherHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -115,14 +116,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         binding.photoImage.setOnClickListener {
             setPhotoImageFitToScreen()
             binding.photoImage.post {
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this,
-                    it, Constants.SHARED_PHOTO_TRANSITION_NAME
-                )
-                Intent(this, PhotoZoomActivity::class.java).apply {
-                    putExtra(KEY_PHOTO_URL, photo.thumbnailRegularUrl)
-                    startActivity(this, options.toBundle())
-                }
+                PhotoZoomActivity.launch(this@PhotoDetailActivity, it, photo.thumbnailRegularUrl)
             }
         }
         binding.downloadPhoto.setOnClickListener {
@@ -145,7 +139,7 @@ class PhotoDetailActivity : AppCompatActivity() {
         }
         binding.userInfo.setOnClickListener {
             val uiState = viewModel.uiState.value as PhotoDetailUIState.Content
-            LauncherHelper.launchUserDetailPage(this, uiState.item.user)
+            UserDetailActivity.launch(this, uiState.item.user)
         }
         addSharedWindowTransitionAnimation()
         binding.content.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -229,10 +223,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             menu.icon?.setTint(resources.getColor(R.color.white, null))
         }
         binding.setWallpaperButton.setOnClickListener {
-            Intent(this, WallpaperSettingsActivity::class.java).apply {
-                putExtra(KEY_PHOTO, photo)
-                startActivity(this)
-            }
+            WallpaperSettingsActivity.launch(this@PhotoDetailActivity, photo)
         }
         binding.toolBar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -291,7 +282,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 binding.lottieLoading.pauseAndGone()
                 binding.errorState.visible()
                 binding.appBarLayout.visible()
-                binding.errorStateMessage.text = uiState.message
+                binding.errorStateMessage.text = getString(uiState.messageResId)
             }
 
             is PhotoDetailUIState.Loading -> binding.lottieLoading.playAndShow()
@@ -340,7 +331,7 @@ class PhotoDetailActivity : AppCompatActivity() {
                 }
                 binding.tags.addView(chip, layoutParams)
                 chip.setOnClickListener {
-                    LauncherHelper.launchSearchPage(this@PhotoDetailActivity, tag)
+                    SearchActivity.launch(this@PhotoDetailActivity, tag)
                 }
             }
         }
@@ -372,5 +363,24 @@ class PhotoDetailActivity : AppCompatActivity() {
         unregisterReceiver(downloadReceiver)
         window.sharedElementEnterTransition.removeListener(sharedEnterTransitionListener)
         window.sharedElementExitTransition.removeListener(sharedExitTransitionListener)
+    }
+
+    companion object {
+        const val KEY_PHOTO = "PHOTO"
+
+        fun launch(
+            activity: Activity,
+            photo: Photo,
+            transitionImage: AppCompatImageView
+        ) {
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity,
+                transitionImage, Constants.SHARED_PHOTO_TRANSITION_NAME
+            )
+            Intent(activity, PhotoDetailActivity::class.java).apply {
+                putExtra(KEY_PHOTO, photo)
+                activity.startActivity(this, options.toBundle())
+            }
+        }
     }
 }

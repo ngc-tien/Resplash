@@ -4,24 +4,24 @@ import com.ngc.tien.resplash.data.remote.ResplashApiService
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.mapper.photo.toItem
 import com.ngc.tien.resplash.util.Constants
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class PhotoRepository @Inject constructor(
-    private val resplashApiService: ResplashApiService
+    private val resplashApiService: ResplashApiService,
 ) {
     suspend fun getPhotos(
         page: Int, perPage: Int = Constants.PAGE_PER_REQUEST,
-    ): List<Photo> {
-        return resplashApiService.getPhotos(page, perPage).map {
+    ): Flow<List<Photo>> = flow {
+        resplashApiService.getPhotos(page, perPage).map {
             it.toItem()
         }
     }
 
     suspend fun getPhotosById(
         id: String,
-    ): Photo {
-        return resplashApiService.getPhotosById(id).toItem()
+    ): Flow<Photo> = flow {
+        resplashApiService.getPhotosById(id).toItem()
     }
 }

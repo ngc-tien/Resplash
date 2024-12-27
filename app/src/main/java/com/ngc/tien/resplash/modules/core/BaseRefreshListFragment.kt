@@ -10,19 +10,19 @@ import com.airbnb.lottie.LottieDrawable
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.databinding.RefreshListItemFragmentLayoutBinding
+import com.ngc.tien.resplash.modules.user.detail.UserDetailActivity
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.pauseAndGone
 import com.ngc.tien.resplash.util.extentions.playAndShow
 import com.ngc.tien.resplash.util.extentions.visible
-import com.ngc.tien.resplash.util.helper.LauncherHelper
 
 abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
     BaseFragment<RefreshListItemFragmentLayoutBinding>(
         RefreshListItemFragmentLayoutBinding::inflate
     ) {
     private var isRefreshing = false
-    abstract val recyclerViewAdapter: BaseRefreshListViewAdapter
+    private var recyclerViewAdapter: BaseRefreshListViewAdapter? = null
     abstract val viewModel: BaseViewModel<T>
     internal var user: User? = null
 
@@ -35,11 +35,13 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
     }
 
     private fun initViews() {
+        recyclerViewAdapter = getAdapter()
         binding.recyclerView.apply {
             layoutManager = StaggeredGridLayoutManager(
                 resources.getInteger(R.integer.number_of_column),
                 LinearLayoutManager.VERTICAL
             )
+            setHasFixedSize(true)
             adapter = recyclerViewAdapter
         }
         binding.lottieLoading.setAnimation(R.raw.lottie_loading)
@@ -52,10 +54,7 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
 
     open fun addObserves() {
         handleLoadMore()
-        viewModel.uiStateLiveData.observe(
-            viewLifecycleOwner,
-            ::renderUiState
-        )
+        viewModel.uiStateLiveData.observe(viewLifecycleOwner, ::renderUiState)
         binding.swipeRefreshLayout.setOnRefreshListener {
             if (viewModel.uiStateLiveData.value !is BaseRefreshListUiState.FirstPageLoading && !isRefreshing) {
                 isRefreshing = true
@@ -100,7 +99,7 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
             binding.errorStateMessage.text = getString(R.string.nothing_to_see_here)
         } else {
             binding.errorState.gone()
-            recyclerViewAdapter.submitList(uiState.items)
+            recyclerViewAdapter?.submitList(uiState.items)
         }
     }
 
@@ -109,8 +108,8 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
         binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.pauseAndGone()
         binding.errorState.visible()
-        binding.errorStateMessage.text = uiState.message
-        recyclerViewAdapter.submitList(emptyList())
+        binding.errorStateMessage.text = requireActivity().getString(uiState.messageResId)
+        recyclerViewAdapter?.submitList(emptyList())
     }
 
     open fun showFirstPageLoadingState() {
@@ -118,17 +117,24 @@ abstract class BaseRefreshListFragment<T : BaseRefreshListItem> :
         binding.swipeRefreshLayout.isRefreshing = false
         binding.lottieLoading.playAndShow()
         binding.errorState.gone()
-        recyclerViewAdapter.submitList(emptyList())
+        recyclerViewAdapter?.submitList(emptyList())
     }
 
     open fun handleUserClick(user: User) {
         if (this.user != null && this.user!!.id == user.id) {
             return
         }
-        LauncherHelper.launchUserDetailPage(requireActivity(), user)
+        UserDetailActivity.launch(requireActivity(), user)
     }
 
     open fun onMapSharedElements(names: List<String?>, sharedElements: MutableMap<String?, View?>) {
 
     }
+
+    override fun onDestroyView() {
+        recyclerViewAdapter = null
+        super.onDestroyView()
+    }
+
+    abstract fun getAdapter(): BaseRefreshListViewAdapter
 }

@@ -39,17 +39,4 @@ data class CollectionsResponse(
     val coverPhoto: PhotoResponse,
     @Json(name = "preview_photos")
     val previewPhotos: List<PhotoResponse>
-) {
-    @Keep
-    data class Links(
-        @Json(name = "self")
-        val self: String, // https://api.unsplash.com/collections/tLDcyvOC_ks
-        @Json(name = "html")
-        val html: String, // https://unsplash.com/collections/tLDcyvOC_ks/american-cities
-        @Json(name = "photos")
-        val photos: String, // https://api.unsplash.com/collections/tLDcyvOC_ks/photos
-        @Json(name = "related")
-        val related: String // https://api.unsplash.com/collections/tLDcyvOC_ks/related
-    )
-
-}
+)

@@ -1,42 +1,21 @@
 package com.ngc.tien.resplash.modules.core
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
-import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
-import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
-import com.ngc.tien.resplash.data.remote.repositories.user.UserRepository
 import com.ngc.tien.resplash.util.getErrorMessage
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import kotlinx.coroutines.withContext
 
 abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
-    @Inject
-    @ApplicationContext
-    protected lateinit var context: Context
-
-    @Inject
-    protected lateinit var photoRepository: PhotoRepository
-
-    @Inject
-    protected lateinit var collectionRepository: CollectionRepository
-
-    @Inject
-    protected lateinit var searchRepository: SearchRepository
-
-    @Inject
-    protected lateinit var userRepository: UserRepository
-
     private val uiState =
         MutableLiveData<BaseRefreshListUiState>(BaseRefreshListUiState.FirstPageLoading)
 
     val uiStateLiveData: LiveData<BaseRefreshListUiState> get() = uiState
 
-    lateinit var requestType: RequestType
+    lateinit var networkRequestEvent: NetworkRequestEvent
 
     private var firstPageLoadingComplete = false
 
@@ -47,14 +26,16 @@ abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
         viewModelScope.launch {
             uiState.value = BaseRefreshListUiState.FirstPageLoading
             try {
-                val items = getData(page = 1)
+                val items = withContext(Dispatchers.IO) {
+                    getData(page = 1)
+                }
                 uiState.value = BaseRefreshListUiState.Content(
                     items = items,
                     currentPage = 1,
                     nextPageState = BaseRefreshListUiState.NextPageState.Idle,
                 )
             } catch (ex: Exception) {
-                uiState.value = BaseRefreshListUiState.FirstPageError(getErrorMessage(context, ex))
+                uiState.value = BaseRefreshListUiState.FirstPageError(getErrorMessage(ex))
             }
             firstPageLoadingComplete = true
         }
@@ -81,7 +62,9 @@ abstract class BaseViewModel<T : BaseRefreshListItem> : ViewModel() {
                 viewModelScope.launch {
                     val nextPage = state.currentPage + 1
                     try {
-                        val newItems = getData(page = nextPage)
+                        val newItems = withContext(Dispatchers.IO) {
+                            getData(page = nextPage)
+                        }
                         uiState.value = state.copy(
                             items = (state.items + newItems).distinctBy { it.id },
                             currentPage = nextPage,

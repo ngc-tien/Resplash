@@ -1,25 +1,32 @@
 package com.ngc.tien.resplash.modules.photo
 
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
+import com.ngc.tien.resplash.data.remote.repositories.collection.CollectionRepository
+import com.ngc.tien.resplash.data.remote.repositories.photo.PhotoRepository
+import com.ngc.tien.resplash.data.remote.repositories.search.SearchRepository
+import com.ngc.tien.resplash.data.remote.repositories.user.UserRepository
 import com.ngc.tien.resplash.modules.core.BaseViewModel
-import com.ngc.tien.resplash.modules.core.RequestType
+import com.ngc.tien.resplash.modules.core.NetworkRequestEvent
+import com.ngc.tien.resplash.modules.core.NetworkRequestEvent.Photo.Type.*;
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PhotosViewModel @Inject constructor() : BaseViewModel<Photo>() {
+class PhotosViewModel @Inject constructor(
+    private val photoRepository: PhotoRepository,
+    private val collectionRepository: CollectionRepository,
+    private val searchRepository: SearchRepository,
+    private val userRepository: UserRepository
+) : BaseViewModel<Photo>() {
     var selectedItemIndex = -1
 
     override suspend fun getData(page: Int): List<Photo> {
-        return when (requestType) {
-            RequestType.Collection -> collectionRepository.getCollectionPhotos(
-                requestType.query,
-                page
-            )
-
-            RequestType.Search -> searchRepository.searchPhotos(requestType.query, page)
-            RequestType.UserPhotos -> userRepository.getPhotos(requestType.query, page)
-            RequestType.UserLikes -> userRepository.getLikePhotos(requestType.query, page)
+        val networkRequestEvent = networkRequestEvent as NetworkRequestEvent.Photo
+        return when (networkRequestEvent.type) {
+            Collections -> collectionRepository.getCollectionPhotos(networkRequestEvent.queryString, page)
+            Search -> searchRepository.searchPhotos(networkRequestEvent.queryString, page)
+            UserPhotos -> userRepository.getPhotos(networkRequestEvent.queryString, page)
+            UserLikes -> userRepository.getLikePhotos(networkRequestEvent.queryString, page)
             else -> photoRepository.getPhotos(page)
         }
     }

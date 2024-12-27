@@ -1,9 +1,14 @@
 package com.ngc.tien.resplash.modules.photo.zoom
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,10 +16,11 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.databinding.ActivityPhotoZoomBinding
-import com.ngc.tien.resplash.util.IntentConstants
+import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.ViewUtils
 import com.ngc.tien.resplash.util.extentions.gone
 import com.ngc.tien.resplash.util.extentions.visible
+
 
 class PhotoZoomActivity : AppCompatActivity() {
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
@@ -33,7 +39,7 @@ class PhotoZoomActivity : AppCompatActivity() {
     private fun loadData() {
         intent?.run {
             Glide.with(this@PhotoZoomActivity)
-                .load(getStringExtra(IntentConstants.KEY_PHOTO_URL))
+                .load(getStringExtra(KEY_PHOTO_URL))
                 .into(binding.photoImage)
         }
     }
@@ -69,6 +75,15 @@ class PhotoZoomActivity : AppCompatActivity() {
         binding.toolBar.setNavigationOnClickListener {
             handleBackPressed()
         }
+        postponeEnterTransition()
+        window.decorView.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                window.decorView.viewTreeObserver.removeOnPreDrawListener(this)
+                startPostponedEnterTransition()
+                return true
+            }
+        })
     }
 
     private fun handleBackPressed() {
@@ -80,5 +95,20 @@ class PhotoZoomActivity : AppCompatActivity() {
         binding.photoImage.layoutParams = layoutParams
         binding.photoImage.setImageDrawable(binding.photoImage.drawable)
         binding.photoImage.post(::finishAfterTransition)
+    }
+
+    companion object {
+        private const val KEY_PHOTO_URL = "PHOTO_URL"
+
+        fun launch(activity: Activity, transitionView: View, imageUrl: String) {
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity,
+                transitionView, Constants.SHARED_PHOTO_TRANSITION_NAME
+            )
+            Intent(activity, PhotoZoomActivity::class.java).apply {
+                putExtra(KEY_PHOTO_URL, imageUrl)
+                activity.startActivity(this, options.toBundle())
+            }
+        }
     }
 }

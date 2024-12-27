@@ -10,17 +10,17 @@ import com.ngc.tien.resplash.databinding.ActivityMainBinding
 import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.core.BaseViewPagerActivity
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
+import com.ngc.tien.resplash.modules.search.SearchActivity
 import com.ngc.tien.resplash.util.Constants
 import com.ngc.tien.resplash.util.extentions.launchUrl
 import com.ngc.tien.resplash.util.extentions.transparent
-import com.ngc.tien.resplash.util.helper.LauncherHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseViewPagerActivity() {
     private lateinit var sharedExitTransitionListener: Transition.TransitionListener
 
-    private val binding by lazy {
+    private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
@@ -34,7 +34,7 @@ class MainActivity : BaseViewPagerActivity() {
         setupViewPager()
         binding.bottomAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
-                R.id.menu_search -> LauncherHelper.launchSearchPage(this@MainActivity)
+                R.id.menu_search -> SearchActivity.launch(this)
             }
             true
         }

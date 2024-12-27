@@ -9,7 +9,6 @@ import com.ngc.tien.resplash.util.Constants
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class CollectionRepository @Inject constructor(
     private val resplashApiService: ResplashApiService
 ) {
@@ -17,12 +16,6 @@ class CollectionRepository @Inject constructor(
         page: Int, perPage: Int = Constants.PAGE_PER_REQUEST,
     ): List<Collection> {
         return resplashApiService.getCollections(page, perPage).map { it.toItem() }
-    }
-
-    suspend fun getCollectionById(
-        id: String
-    ): Collection {
-        return resplashApiService.getCollectionById(id).toItem()
     }
 
     suspend fun getCollectionPhotos(

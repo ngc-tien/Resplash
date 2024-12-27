@@ -33,7 +33,7 @@ class PhotoDetailViewModel @Inject constructor(
                 val photo = photoRepository.getPhotosById(id)
                 _uiState.value = PhotoDetailUIState.Content(photo)
             } catch (ex: Exception) {
-                _uiState.value = PhotoDetailUIState.Error(getErrorMessage(context, ex))
+                _uiState.value = PhotoDetailUIState.Error(getErrorMessage(ex))
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.ngc.tien.resplash.modules.user.search
 
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
@@ -10,19 +11,12 @@ import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
 import com.ngc.tien.resplash.modules.core.BaseRefreshListUiState
-import com.ngc.tien.resplash.util.IntentConstants
-import com.ngc.tien.resplash.util.helper.LauncherHelper
+import com.ngc.tien.resplash.modules.core.BaseRefreshListViewAdapter
+import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchUsersFragment : BaseRefreshListFragment<User>() {
-    override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        RecyclerViewAdapter(
-            Glide.with(this@SearchUsersFragment),
-            ::handleUserClick,
-            ::handlePhotoClick
-        )
-    }
 
     override val viewModel by viewModels<SearchUsersViewModel>()
 
@@ -30,14 +24,20 @@ class SearchUsersFragment : BaseRefreshListFragment<User>() {
         var searchQuery = ""
         arguments?.run {
             requireArguments().run {
-                if (containsKey(IntentConstants.KEY_SEARCH_QUERY)) {
-                    searchQuery = getString(IntentConstants.KEY_SEARCH_QUERY)!!
+                if (containsKey(KEY_SEARCH_QUERY)) {
+                    searchQuery = getString(KEY_SEARCH_QUERY)!!
                 }
             }
         }
         viewModel.searchQuery = searchQuery
         super.initData()
     }
+
+    override fun getAdapter(): BaseRefreshListViewAdapter = RecyclerViewAdapter(
+        Glide.with(this@SearchUsersFragment),
+        ::handleUserClick,
+        ::handlePhotoClick
+    )
 
     private fun handlePhotoClick(
         user: User,
@@ -47,7 +47,7 @@ class SearchUsersFragment : BaseRefreshListFragment<User>() {
         val uiState = viewModel.uiStateLiveData.value as BaseRefreshListUiState.Content
         viewModel.selectedUseIndex = uiState.items.indexOf(user)
         viewModel.selectedPhotoIndex = user.photos.indexOf(photo)
-        LauncherHelper.launchPhotoDetailPage(requireActivity(), photo, transitionImage)
+        PhotoDetailActivity.launch(requireActivity(), photo, transitionImage)
     }
 
     override fun onMapSharedElements(
@@ -66,5 +66,18 @@ class SearchUsersFragment : BaseRefreshListFragment<User>() {
     override fun onDestroyView() {
         requireActivity().setExitSharedElementCallback(null as android.app.SharedElementCallback?)
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val KEY_SEARCH_QUERY = "SEARCH_QUERY"
+
+        fun createFragment(queryString: String) : SearchUsersFragment {
+            return SearchUsersFragment().apply {
+                val bundle = Bundle().apply {
+                    putString(KEY_SEARCH_QUERY, queryString)
+                }
+                arguments = bundle
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.ngc.tien.resplash.configuration.glide
+package com.ngc.tien.resplash.di
 
 import android.content.Context
 import com.bumptech.glide.Glide

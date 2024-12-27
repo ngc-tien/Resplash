@@ -9,7 +9,6 @@ import com.ngc.tien.resplash.util.Constants
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class UserRepository @Inject constructor(
     private val resplashApiService: ResplashApiService
 ) {

@@ -58,6 +58,7 @@ abstract class BaseViewPagerActivity: AppCompatActivity() {
         tabLayout?.run {
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.text = viewPagerAdapter.getPageTitle(position)
+                viewPager.setCurrentItem(position, false)
             }.attach()
         }
         viewPager.setCurrentItem(selectedPage, false)

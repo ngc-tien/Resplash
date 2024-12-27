@@ -1,6 +1,8 @@
 package com.ngc.tien.resplash.modules.photo.wallpaper_settings
 
+import android.app.Activity
 import android.app.WallpaperManager
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -21,7 +23,7 @@ import com.bumptech.glide.request.target.Target
 import com.ngc.tien.resplash.R
 import com.ngc.tien.resplash.data.remote.mapper.photo.Photo
 import com.ngc.tien.resplash.databinding.ActivityWallpaperSettingsBinding
-import com.ngc.tien.resplash.util.IntentConstants
+import com.ngc.tien.resplash.modules.photo.detail.PhotoDetailActivity.Companion.KEY_PHOTO
 import com.ngc.tien.resplash.util.extentions.gone
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +67,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        val photo = intent.getSerializableExtra(IntentConstants.KEY_PHOTO, Photo::class.java)
+        val photo = intent.getSerializableExtra(KEY_PHOTO, Photo::class.java)
         if (photo == null) {
             finish()
         } else {
@@ -148,6 +150,17 @@ class WallpaperSettingsActivity : AppCompatActivity() {
         withContext(Dispatchers.Main) {
             Log.e("WallpaperSettings", "$message")
             Toast.makeText(this@WallpaperSettingsActivity, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        private const val KEY_PHOTO = "PHOTO"
+
+        fun launch(activity: Activity, photo: Photo) {
+            Intent(activity, WallpaperSettingsActivity::class.java).apply {
+                putExtra(KEY_PHOTO, photo)
+                activity.startActivity(this)
+            }
         }
     }
 }

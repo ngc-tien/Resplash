@@ -1,6 +1,6 @@
 package com.ngc.tien.resplash.modules.collections
 
-import android.content.Intent
+import android.os.Bundle
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -8,49 +8,64 @@ import com.ngc.tien.resplash.data.remote.mapper.collection.Collection
 import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.modules.collections.detail.CollectionDetailActivity
 import com.ngc.tien.resplash.modules.core.BaseRefreshListFragment
-import com.ngc.tien.resplash.modules.core.RequestType
-import com.ngc.tien.resplash.util.IntentConstants
+import com.ngc.tien.resplash.modules.core.BaseRefreshListViewAdapter
+import com.ngc.tien.resplash.modules.core.NetworkRequestEvent
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 
 @AndroidEntryPoint
 class CollectionsFragment : BaseRefreshListFragment<Collection>() {
-    override val recyclerViewAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        RecyclerViewAdapter(
-            Glide.with(this@CollectionsFragment),
-            ::handleUserClick,
-            ::handleItemClick
-        )
-    }
-
     override val viewModel by viewModels<CollectionsViewModel>()
 
     override fun initData() {
-        var requestType = RequestType.Home
+        var networkRequestEvent: NetworkRequestEvent = NetworkRequestEvent.Collections()
         arguments?.run {
             requireArguments().run {
-                if (containsKey(IntentConstants.KEY_SEARCH_QUERY)) {
-                    requestType = RequestType.Search
-                    requestType.query = getString(IntentConstants.KEY_SEARCH_QUERY)!!
+                if (containsKey(KEY_SEARCH_QUERY)) {
+                    networkRequestEvent = NetworkRequestEvent.Collections(
+                        getString(KEY_SEARCH_QUERY)!!,
+                        NetworkRequestEvent.Collections.Type.Search
+                    )
                     binding.swipeRefreshLayout.isEnabled = false
-                } else if (containsKey(IntentConstants.KEY_USER_COLLECTIONS)) {
-                    user = getSerializable(IntentConstants.KEY_USER_COLLECTIONS, User::class.java)
-                    requestType = RequestType.UserCollections
-                    requestType.query = user!!.userName
+                } else if (containsKey(KEY_USER_COLLECTIONS)) {
+                    user = getSerializable(KEY_USER_COLLECTIONS, User::class.java)
+                    networkRequestEvent = NetworkRequestEvent.Collections(
+                        user?.userName ?: "",
+                        NetworkRequestEvent.Collections.Type.GetByUser
+                    )
                     binding.swipeRefreshLayout.isEnabled = false
                 }
             }
         }
-        viewModel.requestType = requestType
+        viewModel.networkRequestEvent = networkRequestEvent
         super.initData()
     }
 
-    private fun handleItemClick(
-        collection: Collection,
-        transitionImage: AppCompatImageView
-    ) {
-        Intent(requireActivity(), CollectionDetailActivity::class.java).run {
-            putExtra(IntentConstants.KEY_COLLECTION, collection)
-            startActivity(this)
+    override fun getAdapter(): BaseRefreshListViewAdapter = RecyclerViewAdapter(
+        Glide.with(this@CollectionsFragment),
+        ::handleUserClick,
+        ::handleItemClick
+    )
+
+    private fun handleItemClick(collection: Collection, transitionImage: AppCompatImageView) {
+        CollectionDetailActivity.launch(requireActivity(), collection)
+    }
+
+    companion object {
+        private const val KEY_SEARCH_QUERY = "SEARCH_QUERY"
+        const val KEY_USER_COLLECTIONS = "USER_COLLECTIONS"
+
+        fun createFragment(key: String, query: Any): CollectionsFragment {
+            return CollectionsFragment().apply {
+                val bundle = Bundle().apply {
+                    when (query) {
+                        is Serializable -> putSerializable(key, query)
+                        is String -> putString(key, query)
+                        else -> {}
+                    }
+                }
+                arguments = bundle
+            }
         }
     }
 }

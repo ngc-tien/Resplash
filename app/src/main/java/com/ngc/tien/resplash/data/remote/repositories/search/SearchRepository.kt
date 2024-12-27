@@ -9,9 +9,7 @@ import com.ngc.tien.resplash.data.remote.mapper.user.User
 import com.ngc.tien.resplash.data.remote.mapper.user.toItem
 import com.ngc.tien.resplash.util.Constants
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class SearchRepository @Inject constructor(
     private val resplashApiService: ResplashApiService
 ) {

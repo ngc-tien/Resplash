@@ -1,5 +1,7 @@
 package com.ngc.tien.resplash.modules.user.detail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
@@ -12,7 +14,6 @@ import com.ngc.tien.resplash.modules.collections.CollectionsFragment
 import com.ngc.tien.resplash.modules.core.BaseViewPagerActivity
 import com.ngc.tien.resplash.modules.photo.PhotosFragment
 import com.ngc.tien.resplash.util.Constants
-import com.ngc.tien.resplash.util.IntentConstants
 import com.ngc.tien.resplash.util.extentions.gone
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,7 @@ class UserDetailActivity : BaseViewPagerActivity() {
 
     override fun loadData(savedInstanceState: Bundle?) {
         super.loadData(savedInstanceState)
-        val user = intent.getSerializableExtra(IntentConstants.KEY_USER, User::class.java)
+        val user = intent.getSerializableExtra(KEY_USER, User::class.java)
         if (user == null) {
             finish()
         } else {
@@ -62,7 +63,7 @@ class UserDetailActivity : BaseViewPagerActivity() {
     }
 
     private fun selectedPage(view: View, selectedIndex: Int) {
-        view.setOnClickListener{
+        view.setOnClickListener {
             binding.viewPager.setCurrentItem(selectedIndex, false)
         }
     }
@@ -84,29 +85,29 @@ class UserDetailActivity : BaseViewPagerActivity() {
     }
 
     private fun addUserPhotoFragment() {
-        val fragment = PhotosFragment()
-        val bundle = Bundle().apply {
-            putSerializable(IntentConstants.KEY_USER_PHOTOS, user)
-        }
-        fragment.arguments = bundle
+        val fragment = PhotosFragment.createFragment(PhotosFragment.KEY_USER_PHOTOS, user)
         viewPagerAdapter.addFragment(fragment, getString(R.string.photos))
     }
 
     private fun addLikePhotosFragment() {
-        val fragment = PhotosFragment()
-        val bundle = Bundle().apply {
-            putSerializable(IntentConstants.KEY_USER_LIKES, user)
-        }
-        fragment.arguments = bundle
+        val fragment = PhotosFragment.createFragment(PhotosFragment.KEY_USER_LIKES, user)
         viewPagerAdapter.addFragment(fragment, getString(R.string.likes))
     }
 
     private fun addCollectionFragment() {
-        val fragment = CollectionsFragment()
-        val bundle = Bundle().apply {
-            putSerializable(IntentConstants.KEY_USER_COLLECTIONS, user)
-        }
-        fragment.arguments = bundle
+        val fragment =
+            CollectionsFragment.createFragment(CollectionsFragment.KEY_USER_COLLECTIONS, user)
         viewPagerAdapter.addFragment(fragment, getString(R.string.collections))
+    }
+
+    companion object {
+        private const val KEY_USER = "USER"
+
+        fun launch(activity: Activity, user: User) {
+            Intent(activity, UserDetailActivity::class.java).run {
+                putExtra(KEY_USER, user)
+                activity.startActivity(this)
+            }
+        }
     }
 }
