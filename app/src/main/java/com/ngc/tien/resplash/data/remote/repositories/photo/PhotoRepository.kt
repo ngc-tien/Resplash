@@ -13,15 +13,11 @@ class PhotoRepository @Inject constructor(
 ) {
     suspend fun getPhotos(
         page: Int, perPage: Int = Constants.PAGE_PER_REQUEST,
-    ): Flow<List<Photo>> = flow {
-        resplashApiService.getPhotos(page, perPage).map {
-            it.toItem()
-        }
+    ) = resplashApiService.getPhotos(page, perPage).map {
+        it.toItem()
     }
 
     suspend fun getPhotosById(
         id: String,
-    ): Flow<Photo> = flow {
-        resplashApiService.getPhotosById(id).toItem()
-    }
+    ) = resplashApiService.getPhotosById(id).toItem()
 }
